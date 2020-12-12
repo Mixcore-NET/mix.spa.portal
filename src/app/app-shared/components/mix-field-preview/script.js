@@ -5,6 +5,8 @@
     field: "=",
     isShowTitle: "=?",
     inputClass: "=?",
+    imgW: "=?",
+    imgH: "=?",
   },
   controller: [
     "$rootScope",
@@ -13,6 +15,7 @@
       var ctrl = this;
       ctrl.previousId = null;
       ctrl.$onInit = function () {
+        ctrl.imgH = !ctrl.imgH && !ctrl.imgW ? 25: ctrl.imgH;
         ctrl.uuid = $rootScope.generateUUID();
         if (ctrl.field.isEncrypt) {
           var obj = $rootScope.testJSON(ctrl.model);

@@ -31,7 +31,7 @@
       ctrl.options = {};
       ctrl.$onInit = function () {
         ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
-        ctrl.isImage = ctrl.srcUrl
+        ctrl.isImage = angular.isString(ctrl.srcUrl) && ctrl.srcUrl
           .toLowerCase()
           .match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
         ctrl.id = Math.floor(Math.random() * 100);
@@ -95,7 +95,7 @@
       ctrl.$doCheck = function () {
         if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
           ctrl.src = ctrl.srcUrl;
-          ctrl.isImage = ctrl.srcUrl
+          ctrl.isImage = angular.isString(ctrl.srcUrl) && ctrl.srcUrl
             .toLowerCase()
             .match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
         }

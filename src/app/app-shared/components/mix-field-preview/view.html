@@ -1,5 +1,5 @@
 <div class="row pb-1" ng-if="$ctrl.model">
-  <div ng-switch="$ctrl.field.dataType.toLowerCase()" class="col-9">
+  <div ng-switch="$ctrl.field.dataType.toLowerCase()">
     <div ng-switch-default>
       <p ng-bind="$ctrl.model"></p>
     </div>
@@ -10,7 +10,10 @@
       <span ng-bind="$ctrl.model | utcToLocal:'dd-MM-yyyy'"> </span>
     </div>
     <div ng-switch-when="upload">
-      <preview-image img-height="25" img-src="$ctrl.model"></preview-image>
+      <preview-image ng-if="!$ctrl.imgW && !$ctrl.imgH" img-height="$ctrl.imgH" img-src="$ctrl.model"></preview-image>
+      <a ng-if="$ctrl.model && ($ctrl.imgW || $ctrl.imgH)" href="{{$ctrl.model}}" target="_blank">
+        <img width="{{$ctrl.imgW}}" height="{{$ctrl.imgH}}" ng-src="{{$ctrl.model}}"/>
+      </a>
     </div>
     <div ng-switch-when="icon">
       <i class="{{$ctrl.model}}"> </i>
@@ -42,7 +45,7 @@
       <div id="{{$ctrl.uuid}}" ng-init="$ctrl.generateQRCode()"></div>
     </div>
   </div>
-  <div class="col-9" ng-if="$ctrl.field.isEncrypt && $ctrl.encryptedData">
+  <div ng-if="$ctrl.field.isEncrypt && $ctrl.encryptedData">
     <a
       class="btn btn-info text-white"
       ng-click="$ctrl.showDecrypt = !$ctrl.showDecrypt"

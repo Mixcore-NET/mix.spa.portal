@@ -328,6 +328,7 @@ paths.appPortal = {
     paths.webapp + "app-portal/services/**/*.js",
     paths.webapp + "app-portal/pages/**/*.js",
     paths.webapp + "app-portal/components/**/*.js",
+    paths.webapp + "app-portal/_custom/**/*.js",
   ],
   dest: paths.webroot + "js/app-portal.min.js",
 };

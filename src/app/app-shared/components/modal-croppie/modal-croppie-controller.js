@@ -7,7 +7,8 @@
   file,
   w,
   h,
-  rto
+  rto,
+  autoSave = true
 ) {
   var ctrl = this;
   ctrl.file = file;
@@ -67,10 +68,12 @@
 
   ctrl.ok = async function () {
     ctrl.media.mediaFile.fileStream = ctrl.cropped.image;
+    $rootScope.isBusy = true;
     var result = await mediaService.save(ctrl.media);
     if (result.isSucceed) {
       $uibModalInstance.close(result.data);
     }
+    $rootScope.isBusy = false;
   };
 
   ctrl.cancel = function () {
@@ -202,7 +205,7 @@
     }
   };
   ctrl.loadImageSize = function (w, h) {
-    const maxW = 250;
+    const maxW = screen.width < 800 ? 0.8 * screen.width:  600;
     var rto = w / h;
     ctrl.w = ctrl.w || w;
     ctrl.h = ctrl.h || h;
