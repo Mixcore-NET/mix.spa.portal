@@ -6,8 +6,9 @@ app.controller("ElectroluxRegisterController", [
   "$routeParams",
   "$location",
   "AuthService",
-  "RestAttributeSetDataPortalService",
+  "RestAttributeSetDataElectroluxService",
   "RestRelatedAttributeDataPortalService",
+  "RestAttributeFieldPortalService",
   function (
     $scope,
     $rootScope,
@@ -16,7 +17,8 @@ app.controller("ElectroluxRegisterController", [
     $location,
     authService,
     service,
-    navService
+    navService,
+    fieldService
   ) {
     BaseRestCtrl.call(
       this,
@@ -27,17 +29,18 @@ app.controller("ElectroluxRegisterController", [
       ngAppSettings,
       service
     );
-    $scope.queries = {};
+    $scope.queries = {
+      status: "",
+    };
     $scope.data = {};
     $scope.exportAll = true;
     $scope.settings = $rootScope.globalSettings;
-    $scope.request.orderBy = "Priority";
-    $scope.request.direction = "Asc";
+    $scope.request.orderBy = "CreatedDateTime";
+    $scope.request.direction = "Desc";
     $scope.filterType = "contain";
     $scope.defaultId = "default";
     $scope.attributeSetId = 10;
-    $scope.attributeSetName = 'register';
-    $scope.admin = authService.authentication;
+    $scope.attributeSetName = "register";
     $scope.importFile = {
       file: null,
       fullPath: "",
@@ -45,14 +48,39 @@ app.controller("ElectroluxRegisterController", [
       title: "",
       description: "",
     };
+    $scope.statuses = [
+      {
+        text: "All",
+        value: "",
+      },
+      {
+        text: "Open",
+        value: "Open",
+      },
+      {
+        text: "Invalid",
+        value: "Invalid",
+      },
+      {
+        text: "Reject",
+        value: "Reject",
+      },
+    ];
     $scope.init = async function () {
-        console.log($scope.admin);
+      var getFields = await fieldService.initData($scope.attributeSetName);
+      if (getFields.isSucceed) {
+        $scope.fields = getFields.data;
+        $scope.$apply();
+      }
+      if (!$rootScope.isInRoles(["Admin", "SuperAdmin", "QC"])) {
+        $scope.queries.admin = authService.authentication.userName;
+      }
       $scope.attributeSetId = $scope.attributeSetId;
       $scope.attributeSetName = $scope.attributeSetName;
       $scope.parentId = $routeParams.parentId;
       $scope.parentType = $routeParams.parentType;
       $scope.request.attributeSetName = $scope.attributeSetName;
-      $scope.backUrl = $routeParams.backUrl;
+      $scope.backUrl = "/portal/electrolux-register/list";
       if ($routeParams.dataId != $scope.defaultId) {
         $scope.dataId = $routeParams.dataId;
       }
@@ -76,12 +104,17 @@ app.controller("ElectroluxRegisterController", [
     };
 
     $scope.preview = function (item) {
-      item.editUrl = "/portal/post/details/" + item.id;
-      $rootScope.preview("post", item, item.title, "modal-lg");
+      item.fields = $scope.fields;
+      $scope.register = item;
+      $("#dlg-electrolux-preview").modal("show");
     };
+
     $scope.edit = function (data) {
-      $scope.goToPath("/portal/attribute-set-data/details?dataId=" + data.id);
+      $scope.goToPath(
+        `/portal/attribute-set-data/details?dataId=${data.id}&backurl=${$scope.backUrl}`
+      );
     };
+
     $scope.remove = function (data) {
       $rootScope.showConfirm(
         $scope,
@@ -239,9 +272,9 @@ app.controller("ElectroluxRegisterController", [
           },
           500
         );
-        if (!resp.data || !resp.data.items.length) {
-          $scope.queries = {};
-        }
+        // if (!resp.data || !resp.data.items.length) {
+        //   $scope.queries = {};
+        // }
         $rootScope.isBusy = false;
         $scope.$apply();
       } else {

@@ -1,0 +1,89 @@
+<div class="row mb-3" ng-init="init()">
+  <tabs-v class="mb-3">
+    <pane-v header="Data">
+      <div class="card">
+        <div class="card-body row">
+          <div class="col-md-12 mb-3">
+            <filter-list
+              request="request"
+              callback="getList(pageIndex)"
+            ></filter-list>
+          </div>
+          <div class="col-md-12">
+            <a
+              ng-click="export(request.pageIndex, exportAll)"
+              class="btn btn-sm btn-primary text-white float-right px-4 mr-2"
+            >
+              <i class="fas fa-download"></i> Export Data
+            </a>
+            <select
+              class="custom-select custom-select-sm col-3"
+              ng-model="queries.status"
+              ng-change="getList()"
+            >
+              <option
+                ng-repeat="item in statuses track by $index"
+                value="{{item.value}}"
+                >{{item.text}}
+              </option>
+            </select>
+            <input type="checkbox" ng-model="exportAll" id="export-all" />
+            <label for="export-all">Export All</label>
+            <a
+              href="/portal/attribute-set-data/create?attributeSetId={{attributeSetId}}&attributeSetName={{attributeSetName}}&dataId=default&backUrl={{backUrl}}"
+              class="btn btn-sm btn-primary float-right px-4 mr-2"
+            >
+              <i class="fas fa-plus"></i> Add Data
+            </a>
+          </div>
+
+          <div ng-init="getList()" class="col-md-12 mb-3">
+            <div class="row">
+              <div class="col-sm-12">
+                <em>
+                  Total:
+                  <span ng-bind="data.totalItems" class="text-muted"></span
+                ></em>
+              </div>
+            </div>
+            <electrolux-set-values
+              on-preview="preview(data)"
+              on-duplicate="duplicate(data)"
+              on-update="edit(data)"
+              on-delete="remove(data)"
+              can-drag="request.orderBy === 'Priority' && request.direction === 'Asc'"
+              on-send-mail="sendMail(data)"
+              filter-type="filterType"
+              on-filter-list="getList(0)"
+              on-apply-list="applyList()"
+              selected-list="selectedList"
+              header="''"
+              data="data.items"
+              attribute-set-name="attributeSetName"
+              queries="queries"
+            >
+            </electrolux-set-values>
+          </div>
+        </div>
+        <div class="card-footer">
+          <paging
+            class="small"
+            page="data.page"
+            page-size="data.pageSize"
+            total="data.totalItems"
+            ul-class="pagination justify-content-end m-0"
+            a-class="page-link"
+            paging-action="getList(page-1)"
+            scroll-top="true"
+          >
+          </paging>
+        </div>
+      </div>
+    </pane-v>
+    <!-- <pane-v header="Hub">
+            
+            <service-hub-portal attribute-set-name="attributeSetName"></service-hub-portal>
+        </pane-v> -->
+  </tabs-v>
+</div>
+<electrolux-preview register="register"></electrolux-preview>

@@ -311,11 +311,11 @@ app.run([
 
     $rootScope.preview = function (type, data, title, size, objClass) {
       $rootScope.previewObject = {
+        type: type,
+        data: data,
         title: title || "Preview",
         size: size || "modal-md",
         objClass: objClass,
-        type: type,
-        data: data,
       };
       $("#dlg-preview-popup").modal("show");
     };
@@ -343,6 +343,20 @@ app.run([
           });
         });
       }, 200);
+    };
+
+    $rootScope.isInRoles = function (roleNames) {
+      for (let index = 0; index < roleNames.length; index++) {
+        const roleName = roleNames[index];
+        if (authService.isInRole(roleName)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    $rootScope.isInRole = function (roleName) {
+      return authService.isInRole(roleName);
     };
 
     $rootScope.showErrors = function (errors) {
@@ -385,6 +399,10 @@ app.run([
       } else {
         alert(content);
       }
+    };
+
+    $rootScope.alert = function (content, type) {
+      $rootScope.preview("message", content);
     };
     $rootScope.encrypt = function (message) {
       var keySize = 256;

@@ -1,6 +1,6 @@
-modules.component("attributeSetValues", {
+modules.component("electroluxSetValues", {
   templateUrl:
-    "/app/app-portal/components/attribute-set-values/attribute-set-values.html?v=2",
+    "/app/app-portal/_custom/components/electrolux-set-values/view.html",
   bindings: {
     header: "=",
     data: "=",
@@ -31,6 +31,8 @@ modules.component("attributeSetValues", {
       ctrl.filterTypes = ["contain", "equal"];
       ctrl.selectedProp = null;
       ctrl.settings = $rootScope.globalSettings;
+      ctrl.isInRole = $rootScope.isInRole;
+      ctrl.isInRoles = $rootScope.isInRoles;
       ctrl.$onInit = async function () {
         if (!ctrl.selectedList) {
           ctrl.selectedList = {
@@ -46,6 +48,13 @@ modules.component("attributeSetValues", {
             ctrl.fields = getFields.data;
             $scope.$apply();
           }
+        }
+        ctrl.filterFields();
+      };
+      ctrl.filterFields = function () {
+        if ($rootScope.isInRole("QC")) {
+          const qcCols = ["ho_va_ten", "so_dien_thoai", "admin"];
+          ctrl.fields = ctrl.fields.filter((m) => qcCols.includes(m.name));
         }
       };
       ctrl.select = function (item) {

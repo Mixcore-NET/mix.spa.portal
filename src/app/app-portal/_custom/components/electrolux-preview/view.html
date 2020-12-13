@@ -1,0 +1,104 @@
+<!-- Modal -->
+<div
+  class="modal fade modal-default"
+  id="dlg-electrolux-preview"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header py-2">
+        <h6 class="modal-title" ng-bind="$ctrl.register.obj.ho_va_ten"></h6>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          style="z-index: 999;"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div
+            ng-repeat="field in $ctrl.register.fields | orderBy: 'priority' track by $index"
+            class="py-2 row"
+          >
+            <div class="col-md-3">
+              <p><b ng-bind="field.title"></b>:</p>
+            </div>
+            <div class="col-md-9">
+              <mix-field-preview
+                model="$ctrl.register.obj[field.name]"
+                field="field"
+                img-w="'100%'"
+              ></mix-field-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div
+          ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
+          class="container row mb-3"
+        >
+          <div class="col-10">
+            <textarea
+              ng-model="$ctrl.register.obj.admin_notes"
+              class="form-control"
+            ></textarea>
+          </div>
+          <div class="col-2">
+            <button class="btn btn-success" ng-click="$ctrl.saveNotes()">
+              Save
+            </button>
+          </div>
+        </div>
+        <div
+          class="container text-right"
+          ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
+        >
+          <button
+            class="btn btn-success"
+            ng-click="$ctrl.changeStatus('Valid')"
+          >
+            Valid
+          </button>
+          <button
+            class="btn btn-warning"
+            ng-click="$ctrl.changeStatus('Invalid')"
+          >
+            Invalid
+          </button>
+          <button
+            class="btn btn-danger"
+            ng-click="$ctrl.changeStatus('Reject')"
+          >
+            Reject
+          </button>
+        </div>
+        <div class="container text-right" ng-if="$ctrl.isInRoles(['QC'])">
+          <button
+            class="btn btn-warning"
+            ng-click="$ctrl.changeStatus('Invalid')"
+          >
+            Reopen
+          </button>
+
+          <button
+            class="btn btn-success"
+            ng-if="$ctrl.register.obj.status == 'Valid'"
+            ng-click="$ctrl.changeStatus('QCPassed')"
+          >
+            QC Passed
+          </button>
+          <button class="btn btn-info" ng-click="$ctrl.sendSMS()">
+            Send SMS
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
