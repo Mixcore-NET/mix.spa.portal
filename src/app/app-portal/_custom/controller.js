@@ -58,6 +58,10 @@ app.controller("ElectroluxRegisterController", [
         value: "Open",
       },
       {
+        text: "Valid",
+        value: "Valid",
+      },
+      {
         text: "Invalid",
         value: "Invalid",
       },
@@ -74,6 +78,7 @@ app.controller("ElectroluxRegisterController", [
       }
       if (!$rootScope.isInRoles(["Admin", "SuperAdmin", "QC"])) {
         $scope.queries.admin = authService.authentication.userName;
+        $scope.queries.status = "Open";
       }
       $scope.attributeSetId = $scope.attributeSetId;
       $scope.attributeSetName = $scope.attributeSetName;
@@ -201,6 +206,31 @@ app.controller("ElectroluxRegisterController", [
         $scope.$apply();
       }
     };
+    $scope.sendSmsByStatus = function (status) {
+      $rootScope.showConfirm(
+        $scope,
+        "sendSmsByStatusConfirmed",
+        [data],
+        null,
+        `Send ${status} Sms`,
+        `Are you sure to send ${status} sms to All`
+      );
+    };
+
+    $scope.sendSmsByStatusConfirmed = async function (status) {
+      $rootScope.isBusy = true;
+      var result = await service.sendSmsByStatus(status);
+      if (result.isSucceed) {
+        $rootScope.showMessage("success", "success");
+        $rootScope.isBusy = false;
+        $scope.$apply();
+      } else {
+        $rootScope.showMessage("failed");
+        $rootScope.isBusy = false;
+        $scope.$apply();
+      }
+    };
+
     $scope.saveOthers = async function () {
       var response = await service.saveList($scope.others);
       if (response.isSucceed) {

@@ -9,6 +9,13 @@
       var ctrl = this;
       ctrl.isInRole = $rootScope.isInRole;
       ctrl.isInRoles = $rootScope.isInRoles;
+      ctrl.canSendSMS = function () {
+        return (
+          ctrl.register &&
+          (ctrl.register.obj.status == "Invalid" ||
+            ctrl.register.obj.status == "Reject")
+        );
+      };
       ctrl.changeStatus = async function (status) {
         $rootScope.showConfirm(
           ctrl,

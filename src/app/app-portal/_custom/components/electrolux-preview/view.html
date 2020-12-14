@@ -94,7 +94,11 @@
           >
             QC Passed
           </button>
-          <button class="btn btn-info" ng-click="$ctrl.sendSMS()">
+          <button
+            class="btn btn-info"
+            ng-if="$ctrl.canSendSMS()"
+            ng-click="$ctrl.sendSMS()"
+          >
             Send SMS
           </button>
         </div>
