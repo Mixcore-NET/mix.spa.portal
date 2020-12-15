@@ -4,6 +4,8 @@ app.factory("RestAttributeSetDataElectroluxService", [
   "CommonService",
   function (baseService, commonService) {
     var serviceFactory = angular.copy(baseService);
+    serviceFactory.lang = "vi-vn";
+    serviceFactory.prefixUrl = "/rest/vi-vn/attribute-set-data/electrolux";
     serviceFactory.init("attribute-set-data/electrolux");
 
     var _sendSMS = async function (objData) {
