@@ -56,50 +56,34 @@
             </button>
           </div>
         </div>
-        <div
-          class="container text-right"
-          ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
-        >
+        <div class="container text-right">
           <button
+            ng-if="$ctrl.isInRoles(['QC', 'Manager','SuperAdmin'])"
+            class="btn btn-success"
+            ng-click="$ctrl.changeStatus('Open')"
+          >
+            Re-Open
+          </button>
+          <button
+            ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
             class="btn btn-success"
             ng-click="$ctrl.changeStatus('Valid')"
           >
             Valid
           </button>
           <button
+            ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
             class="btn btn-warning"
             ng-click="$ctrl.changeStatus('Invalid')"
           >
             Invalid
           </button>
           <button
+            ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
             class="btn btn-danger"
             ng-click="$ctrl.changeStatus('Reject')"
           >
             Reject
-          </button>
-        </div>
-        <div class="container text-right" ng-if="$ctrl.isInRoles(['QC'])">
-          <button
-            class="btn btn-warning"
-            ng-click="$ctrl.changeStatus('Invalid')"
-          >
-            Reopen
-          </button>
-
-          <button
-            class="btn btn-success"
-            ng-if="$ctrl.register.obj.status == 'Valid'"
-            ng-click="$ctrl.changeStatus('QCPassed')"
-          >
-            QC Passed
-          </button>
-          <button
-            class="btn btn-info"
-            ng-if="$ctrl.canSendSMS()"
-            ng-click="$ctrl.sendSMS()"
-          >
-            Send SMS
           </button>
         </div>
       </div>

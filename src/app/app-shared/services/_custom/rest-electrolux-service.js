@@ -16,6 +16,15 @@ app.factory("RestAttributeSetDataElectroluxService", [
       return await commonService.getRestApiResult(req);
     };
 
+    var _sendSMSByStatus = async function (status) {
+      var url = `${this.prefixUrl}/send-sms-by-status/${status}`;
+      var req = {
+        method: "GET",
+        url: url,
+      };
+      return await commonService.getRestApiResult(req);
+    };
+
     var _saveValues = async function (dataId, objData) {
       var url = `${this.prefixUrl}/save-values/${dataId}`;
       var req = {
@@ -83,6 +92,7 @@ app.factory("RestAttributeSetDataElectroluxService", [
     serviceFactory.getAddictionalData = _getAddictionalData;
     serviceFactory.saveValues = _saveValues;
     serviceFactory.sendSMS = _sendSMS;
+    serviceFactory.sendSMSByStatus = _sendSMSByStatus;
     serviceFactory.export = _export;
     serviceFactory.search = _search;
     return serviceFactory;

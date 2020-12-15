@@ -2,16 +2,9 @@
   <div class="card-header py-1">
     <span ng-bind="$ctrl.header"></span>
     <div class="row">
-      <div class="col-md-1">
-        <input
-          type="checkbox"
-          ng-model="$ctrl.selectedList.isSelectAll"
-          ng-change="$ctrl.selectAll($ctrl.selectedList.isSelectAll)"
-        />
-      </div>
       <div
         ng-repeat="col in $ctrl.fields | orderBy:'priority' track by $index"
-        ng-if="$index < 3"
+        ng-if="$index < 4"
         class="col-md-2"
       >
         <div class="input-group input-group-xs">
@@ -30,18 +23,7 @@
       </div>
       <!-- <small class="col-md-2">Author</small> -->
       <small class="col-md-2">Created Date</small>
-      <div class="col-md-1">
-        <div class="input-group input-group-xs">
-          <select
-            class="custom-select custom-select-sm mr-2"
-            ng-model="$ctrl.filterType"
-          >
-            <option ng-repeat="item in $ctrl.filterTypes" ng-value="item"
-              >{{item}}</option
-            >
-          </select>
-        </div>
-      </div>
+      <small class="col-md-2">Actions</small>
     </div>
   </div>
   <div class="card-body py-1">
@@ -66,27 +48,8 @@
         class="border-bottom attr-set-value-item"
       >
         <div class="row">
-          <div class="col-md- form-inline">
-            <small
-              dnd-handle
-              class="fa fa-grip-vertical text-black-50 mr-2"
-              style="cursor: grab;"
-            ></small>
-            <input
-              type="checkbox"
-              ng-model="item.isSelected"
-              ng-change="$ctrl.select(item)"
-            />
-            <small>
-              <input
-                class="ml-1 border-0 p-0 text-center text-black-50"
-                style="width: 25px;"
-                ng-model="item.priority"
-              />
-            </small>
-          </div>
           <div
-            ng-if="$index < 3"
+            ng-if="$index < 4"
             ng-repeat="field in $ctrl.fields | orderBy: 'priority' track by $index"
             class="col-md-2 py-2"
           >
@@ -95,10 +58,6 @@
               field="field"
             ></mix-field-preview>
           </div>
-          <!-- <div class="col-md-2">
-                        <small class="text-black-50 align-middle" ng-bind="item.createdBy">
-                        </small>
-                    </div> -->
           <div class="col-md-2">
             <small
               class="text-black-50 align-middle"
@@ -123,7 +82,7 @@
                 <span class="fa fa-link"></span
               ></a>
               <a
-                ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
+                ng-if="$ctrl.isInRoles(['SuperAdmin'])"
                 ng-click="$ctrl.update(item)"
                 class="btn btn-link text-primary"
               >
@@ -131,7 +90,7 @@
               </a>
               <a
                 ng-click="$ctrl.delete(item)"
-                ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
+                ng-if="$ctrl.isInRoles(['SuperAdmin'])"
                 class="btn btn-link text-danger"
               >
                 <span class="fas fa-trash-alt"></span>

@@ -71,21 +71,23 @@ app.controller("ElectroluxRegisterController", [
       },
     ];
     $scope.init = async function () {
+      if (!$rootScope.isInRoles(["SuperAdmin", "QC", "Manager"])) {
+        $scope.queries.admin = authService.authentication.userName;
+        $scope.queries.status = "Open";
+      }
       var getFields = await fieldService.initData($scope.attributeSetName);
       if (getFields.isSucceed) {
         $scope.fields = getFields.data;
         $scope.$apply();
       }
-      if (!$rootScope.isInRoles(["Admin", "SuperAdmin", "QC"])) {
-        $scope.queries.admin = authService.authentication.userName;
-        $scope.queries.status = "Open";
-      }
+
       $scope.attributeSetId = $scope.attributeSetId;
       $scope.attributeSetName = $scope.attributeSetName;
       $scope.parentId = $routeParams.parentId;
       $scope.parentType = $routeParams.parentType;
       $scope.request.attributeSetName = $scope.attributeSetName;
       $scope.backUrl = "/portal/electrolux-register/list";
+      $scope.isInit = true;
       if ($routeParams.dataId != $scope.defaultId) {
         $scope.dataId = $routeParams.dataId;
       }
@@ -210,7 +212,7 @@ app.controller("ElectroluxRegisterController", [
       $rootScope.showConfirm(
         $scope,
         "sendSmsByStatusConfirmed",
-        [data],
+        [status],
         null,
         `Send ${status} Sms`,
         `Are you sure to send ${status} sms to All`
@@ -219,7 +221,7 @@ app.controller("ElectroluxRegisterController", [
 
     $scope.sendSmsByStatusConfirmed = async function (status) {
       $rootScope.isBusy = true;
-      var result = await service.sendSmsByStatus(status);
+      var result = await service.sendSMSByStatus(status);
       if (result.isSucceed) {
         $rootScope.showMessage("success", "success");
         $rootScope.isBusy = false;
