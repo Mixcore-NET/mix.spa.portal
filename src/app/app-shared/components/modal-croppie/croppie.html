@@ -1,6 +1,6 @@
 <div class="modal-body" ng-init="$ctrl.init()">
   <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="panel-body hidden">
       <div class="input-group">
         <div class="custom-file">
           <input
@@ -13,7 +13,7 @@
             class="hidden"
           />
           <label class="custom-file-label" for="{{$ctrl.id}}"
-            >Upload file...</label
+            >Thêm ảnh...</label
           >
         </div>
       </div>
@@ -40,6 +40,6 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-success" ng-click="$ctrl.ok()">Save</button>
-  <button class="btn btn-default" ng-click="$ctrl.cancel()">Cancel</button>
+  <button class="btn btn-success" ng-click="$ctrl.ok()">Lưu</button>
+  <button class="btn btn-default" ng-click="$ctrl.cancel()">Hủy</button>
 </div>

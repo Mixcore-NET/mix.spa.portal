@@ -6,7 +6,11 @@
   role="dialog"
   aria-hidden="true"
 >
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered"
+    role="document"
+    style="max-width: 80vw;"
+  >
     <div class="modal-content">
       <div class="modal-header py-2">
         <h6 class="modal-title" ng-bind="$ctrl.register.obj.ho_va_ten"></h6>
@@ -21,15 +25,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="container">
+        <div class="container row">
           <div
             ng-repeat="field in $ctrl.register.fields | orderBy: 'priority' track by $index"
-            class="py-2 row"
+            class="py-2 col-md-6"
           >
-            <div class="col-md-3">
+            <div class="">
               <p><b ng-bind="field.title"></b>:</p>
-            </div>
-            <div class="col-md-9">
               <mix-field-preview
                 model="$ctrl.register.obj[field.name]"
                 field="field"

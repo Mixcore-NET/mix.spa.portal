@@ -1,4 +1,4 @@
-<div class="row pb-1" ng-if="$ctrl.model">
+<div class="pb-1" ng-if="$ctrl.model">
   <div ng-switch="$ctrl.field.dataType.toLowerCase()">
     <div ng-switch-default>
       <p ng-bind="$ctrl.model"></p>
@@ -10,9 +10,21 @@
       <span ng-bind="$ctrl.model | utcToLocal:'dd-MM-yyyy'"> </span>
     </div>
     <div ng-switch-when="upload">
-      <preview-image ng-if="!$ctrl.imgW && !$ctrl.imgH" img-height="$ctrl.imgH" img-src="$ctrl.model"></preview-image>
-      <a ng-if="$ctrl.model && ($ctrl.imgW || $ctrl.imgH)" href="{{$ctrl.model}}" target="_blank">
-        <img width="{{$ctrl.imgW}}" height="{{$ctrl.imgH}}" ng-src="{{$ctrl.model}}"/>
+      <preview-image
+        ng-if="!$ctrl.imgW && !$ctrl.imgH"
+        img-height="$ctrl.imgH"
+        img-src="$ctrl.model"
+      ></preview-image>
+      <a
+        ng-if="$ctrl.model && ($ctrl.imgW || $ctrl.imgH)"
+        href="{{$ctrl.model}}"
+        target="_blank"
+      >
+        <img
+          width="{{$ctrl.imgW}}"
+          height="{{$ctrl.imgH}}"
+          ng-src="{{$ctrl.model}}"
+        />
       </a>
     </div>
     <div ng-switch-when="icon">

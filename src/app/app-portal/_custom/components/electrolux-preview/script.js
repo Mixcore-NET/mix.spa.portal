@@ -35,7 +35,9 @@
         });
         if (save.isSucceed) {
           $rootScope.alert("Thành công");
+          ctrl.callback({ pageIndex: 0 });
           $rootScope.isBusy = false;
+
           $scope.$apply();
         } else {
           $rootScope.showErrors(save.errors);
@@ -73,5 +75,6 @@
   ],
   bindings: {
     register: "=",
+    callback: "&",
   },
 });
