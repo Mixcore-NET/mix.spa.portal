@@ -101,7 +101,7 @@
             <div ng-switch-when="message">
               <div class="row col-md-12">
                 <span
-                  ng-bind="$ctrl.previewObject.data"
+                  ng-bind-html="$ctrl.previewObject.data"
                   class="text-{{$ctrl.previewObject.objClass}}"
                 >
                 </span>

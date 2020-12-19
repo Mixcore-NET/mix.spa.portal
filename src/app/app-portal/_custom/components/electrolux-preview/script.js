@@ -34,6 +34,7 @@
           status: ctrl.register.obj.status,
         });
         if (save.isSucceed) {
+          $("#dlg-electrolux-preview").modal("hide");
           $rootScope.alert("Thành công");
           ctrl.callback({ pageIndex: 0 });
           $rootScope.isBusy = false;
@@ -62,6 +63,7 @@
           admin_notes: ctrl.register.obj.admin_notes,
         });
         if (save.isSucceed) {
+          $("#dlg-electrolux-preview").modal("hide");
           $rootScope.alert("Thành công");
           $rootScope.isBusy = false;
           $scope.$apply();

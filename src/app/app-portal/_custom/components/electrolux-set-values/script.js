@@ -56,6 +56,10 @@ modules.component("electroluxSetValues", {
           const qcCols = ["ho_va_ten", "so_dien_thoai", "admin"];
           ctrl.fields = ctrl.fields.filter((m) => qcCols.includes(m.name));
         }
+        if ($rootScope.isInRole("Admin")) {
+          const qcCols = ["ho_va_ten", "so_dien_thoai", "cmnd"];
+          ctrl.fields = ctrl.fields.filter((m) => qcCols.includes(m.name));
+        }
       };
       ctrl.select = function (item) {
         if (item.isSelected) {

@@ -3,23 +3,11 @@
 >
   <!-- <a class="navbar-brand ml-2" href="/{{$ctrl.settings.lang}}/" target="_blank" aria-label="mixcore"> -->
   <a class="navbar-brand ml-2" href="/" target="_blank" aria-label="mixcore">
-    <div
-      class="mixcore-logo"
-      style="
-        width: 120px;
-        height: 25px;
-        background-color: hsla(
-          var(--primary-color-hue, 211),
-          var(--primary-color-saturation, 100%),
-          var(--primary-color-brightness, 50%),
-          1
-        );
-        -webkit-mask: url(../assets/mixcore-logo-green.svg) no-repeat 50% 50%;
-        mask: url(../assets/mixcore-logo-green.svg) no-repeat 50% 50%;
-      "
-    ></div>
-
-    <!-- <img src="{{$ctrl.settings.data.Logo}}" alt="Kiwi standing on oval" height="25px"> -->
+    <img
+      src="/content/templates/electrolux/assets/assets/icons/electrolux_logo_sg.svg"
+      alt="Kiwi standing on oval"
+      height="25px"
+    />
   </a>
 
   <button
@@ -36,10 +24,9 @@
 
   <ul
     class="navbar-nav flex-row ml-md-auto d-none d-md-flex"
-    ng-if="$ctrl.settings"
+    ng-if="$ctrl.settings && $ctrl.isInRoles('SuperAdmin')"
   >
     <li class="nav-item mr-2 text-center">
-      {{$ctrl.isAdmin}}
       <a
         class="nav-link p-2"
         href="#"
@@ -103,24 +90,21 @@
         </a>
       </div>
     </li>
-
-    <li class="nav-item mr-2">
-      <a
-        class="nav-link p-2 text-danger"
-        href="#"
-        ng-click="$ctrl.logOut()"
-        rel="noopener"
-        aria-label="Logout"
-      >
-        <i class="mi mi-PowerButton"></i>
-      </a>
-    </li>
   </ul>
+  <a
+    class="navbar-nav flex-row ml-md-auto d-none d-md-flex nav-link p-2 text-danger"
+    href="#"
+    ng-click="$ctrl.logOut()"
+    rel="noopener"
+    aria-label="Logout"
+  >
+    <i class="mi mi-PowerButton"></i>
+  </a>
   <a href="/portal/my-profile">
     <img
       class="rounded-circle border"
       alt="200x200"
-      ng-src="{{$ctrl.avatar}}"
+      src="/assets/img/user.png"
       data-holder-rendered="true"
       width="32"
       height="32"

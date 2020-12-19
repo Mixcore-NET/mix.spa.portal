@@ -17,6 +17,7 @@
         globalSettingsService
       ) {
         var ctrl = this;
+        ctrl.isInRoles = $rootScope.isInRoles;
         ctrl.globalSettings = $rootScope.globalSettings;
         if (authService.authentication) {
           ctrl.avatar = authService.authentication.avatar;

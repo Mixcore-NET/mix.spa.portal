@@ -37,7 +37,8 @@ app.controller("ElectroluxRegisterController", [
     $scope.settings = $rootScope.globalSettings;
     $scope.request.orderBy = "CreatedDateTime";
     $scope.request.direction = "Desc";
-    $scope.filterType = "contain";
+    $scope.request.pageSize = 10;
+    $scope.filterType = "equal";
     $scope.defaultId = "default";
     $scope.attributeSetId = 10;
     $scope.attributeSetName = "register";
@@ -69,10 +70,25 @@ app.controller("ElectroluxRegisterController", [
         text: "Reject",
         value: "Reject",
       },
+      {
+        text: "QCPassed",
+        value: "QCPassed",
+      },
+      {
+        text: "Paid",
+        value: "Paid",
+      },
+      {
+        text: "UnPaid",
+        value: "UnPaid",
+      },
     ];
     $scope.init = async function () {
       if (!$rootScope.isInRoles(["SuperAdmin", "QC", "Manager"])) {
         $scope.queries.admin = authService.authentication.userName;
+        $scope.statuses = $scope.statuses.filter(
+          (m) => m.value != "Paid" && m.value != "UnPaid"
+        );
         $scope.queries.status = "Open";
       }
       var getFields = await fieldService.initData($scope.attributeSetName);
@@ -261,6 +277,7 @@ app.controller("ElectroluxRegisterController", [
       }
     };
     $scope.getList = async function (pageIndex) {
+      $scope.request.filterType = $scope.request.filterType ?? "equal";
       if (pageIndex !== undefined) {
         $scope.request.pageIndex = pageIndex;
       }
@@ -277,7 +294,6 @@ app.controller("ElectroluxRegisterController", [
         $scope.request.attributeSetId = $scope.attributeSetId;
       }
       $scope.request.attributeSetName = $scope.attributeSetName;
-      $scope.request.filterType = $routeParams.filterType || "contain";
       Object.keys($scope.queries).forEach((e) => {
         if ($scope.queries[e]) {
           query[e] = $scope.queries[e];
@@ -355,7 +371,9 @@ app.controller("ElectroluxRegisterController", [
       var resp = await service.export(request);
       if (resp && resp.isSucceed) {
         if (resp.data) {
-          window.top.location = resp.data.webPath;
+          const content = `<a href="${resp.data.webPath}" target="_blank">Tải về</a>`;
+          $rootScope.alert(content);
+          // window.top.location = resp.data.webPath;
         } else {
           $rootScope.showMessage("Nothing to export");
         }
