@@ -114,6 +114,7 @@ app.controller("ElectroluxRegisterController", [
           parentType: $scope.parentType,
         };
       }
+      $scope.getList();
     };
     $scope.selectData = function () {
       if ($scope.selectedList.data.length) {

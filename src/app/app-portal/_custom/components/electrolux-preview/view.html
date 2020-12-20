@@ -61,10 +61,24 @@
         <div class="container text-right">
           <button
             ng-if="$ctrl.isInRoles(['QC', 'Manager','SuperAdmin'])"
-            class="btn btn-success"
+            class="btn btn-secondary"
             ng-click="$ctrl.changeStatus('Open')"
           >
             Re-Open
+          </button>
+          <button
+            ng-if="$ctrl.isInRoles(['QC', 'Manager','SuperAdmin'])"
+            class="btn btn-success"
+            ng-click="$ctrl.changeStatus('Paid')"
+          >
+            Paid
+          </button>
+          <button
+            ng-if="$ctrl.isInRoles(['QC', 'Manager','SuperAdmin'])"
+            class="btn btn-secondary"
+            ng-click="$ctrl.changeStatus('UnPaid')"
+          >
+            UnPaid
           </button>
           <button
             ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
@@ -86,6 +100,14 @@
             ng-click="$ctrl.changeStatus('Reject')"
           >
             Reject
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            Close
           </button>
         </div>
       </div>

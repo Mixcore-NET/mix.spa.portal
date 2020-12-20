@@ -107,7 +107,9 @@ modules.component("attributeList", {
       };
 
       ctrl.generateName = function (col) {
-        col.name = $rootScope.generateKeyword(col.title, "_");
+        if (!col.id) {
+          col.name = $rootScope.generateKeyword(col.title, "_");
+        }
       };
       ctrl.removeAttr = function (index) {
         if (ctrl.fields) {

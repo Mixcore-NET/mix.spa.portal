@@ -32,6 +32,7 @@
         ctrl.register.obj.status = status;
         var save = await dataService.saveValues(ctrl.register.id, {
           status: ctrl.register.obj.status,
+          sms_status: null,
         });
         if (save.isSucceed) {
           $("#dlg-electrolux-preview").modal("hide");
