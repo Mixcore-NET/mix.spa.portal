@@ -46,16 +46,18 @@
           ng-if="$ctrl.isInRoles(['Admin', 'SuperAdmin'])"
           class="container row mb-3"
         >
+        <div class="col-2">
+          <!-- <button class="btn btn-success" ng-click="$ctrl.saveNotes()">
+            Save
+          </button> -->
+          Admin Note (auto save)
+          
+        </div>
           <div class="col-10">
             <textarea
               ng-model="$ctrl.register.obj.admin_notes"
               class="form-control"
             ></textarea>
-          </div>
-          <div class="col-2">
-            <button class="btn btn-success" ng-click="$ctrl.saveNotes()">
-              Save
-            </button>
           </div>
         </div>
         <div class="container text-right">
