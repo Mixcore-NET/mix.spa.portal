@@ -37,7 +37,7 @@
       <div ng-bind-html="$ctrl.model"></div>
     </div>
     <div ng-switch-when="double">
-      <p ng-bind-html="$ctrl.model"></p>
+      <p ng-bind-html="$ctrl.model | money"></p>
     </div>
     <div ng-switch-when="boolean">
       <input class="form-control" type="checkbox" ng-model="$ctrl.model" />

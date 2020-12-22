@@ -278,7 +278,9 @@ app.controller("ElectroluxRegisterController", [
       }
     };
     $scope.getList = async function (pageIndex) {
-      $scope.request.filterType = $scope.request.filterType ?? "equal";
+      $scope.request.filterType = $scope.request.filterType
+        ? $scope.request.filterType
+        : "equal";
       if (pageIndex !== undefined) {
         $scope.request.pageIndex = pageIndex;
       }
