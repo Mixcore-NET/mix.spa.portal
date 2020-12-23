@@ -30,7 +30,7 @@
   // `https://via.placeholder.com/${ctrl.options.render.width}x${ctrl.options.render.height}.png`;
   ctrl.init = function () {
     ctrl.srcUrl = ctrl.srcUrl || ctrl.image_placeholder;
-    ctrl.maxHeight = ctrl.maxHeight || "2000px";
+    ctrl.maxHeight = ctrl.maxHeight || "800px";
     ctrl.id = Math.floor(Math.random() * 100);
     ctrl.canvas = document.getElementById(`canvas-${ctrl.id}`);
     ctrl.cropped = {
@@ -205,15 +205,16 @@
     }
   };
   ctrl.loadImageSize = function (w, h) {
-    const maxW = screen.width < 800 ? 0.8 * screen.width:  600;
+    const maxW = screen.width < 800 ? 0.8 * screen.width : 600;
     var rto = w / h;
     ctrl.w = ctrl.w || w;
     ctrl.h = ctrl.h || h;
     ctrl.rto = ctrl.rto || rto;
+    const oh = ctrl.h > 900 ? 900 : ctrl.h;
     ctrl.options = {
       boundary: { height: maxW / rto, width: maxW },
       render: { height: maxW / rto, width: maxW },
-      output: { height: ctrl.h, width: ctrl.h * ctrl.rto },
+      output: { height: oh, width: oh * ctrl.rto },
     };
     ctrl.loadViewport();
     // ctrl.image_placeholder = `https://via.placeholder.com/${ctrl.options.render.width}x${ctrl.options.render.height}.png`;

@@ -56,6 +56,12 @@
                   <span ng-bind="data.totalItems" class="text-muted"></span
                 ></em>
               </div>
+              <div class="col-sm-12">
+                <em>
+                  Total Gift:
+                  <b ng-bind="data.totalGift | money" class="text-muted"></b>
+                </em>
+              </div>
             </div>
             <electrolux-set-values
               on-preview="preview(data)"

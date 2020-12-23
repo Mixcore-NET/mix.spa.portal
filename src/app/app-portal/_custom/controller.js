@@ -307,7 +307,9 @@ app.controller("ElectroluxRegisterController", [
       var resp = await service.getList($scope.request);
       if (resp && resp.isSucceed) {
         $scope.data = resp.data;
+        $scope.totalGift = 0;
         $.each($scope.data.items, function (i, data) {
+          $scope.totalGift += data.obj.gia_tri_giai_thuong;
           $.each($scope.activeddata, function (i, e) {
             if (e.dataId === data.id) {
               data.isHidden = true;
@@ -340,6 +342,7 @@ app.controller("ElectroluxRegisterController", [
         $scope.$apply();
       }
     };
+    $scope.sumGift = function () {};
     $scope.export = async function (pageIndex, exportAll) {
       if (pageIndex !== undefined) {
         $scope.request.pageIndex = pageIndex;
