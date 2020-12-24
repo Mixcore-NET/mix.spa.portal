@@ -4,8 +4,10 @@
   controller: [
     "$rootScope",
     "$scope",
+    "$filter",
     "RestAttributeSetDataElectroluxService",
-    function ($rootScope, $scope, dataService) {
+    "AuthService",
+    function ($rootScope, $scope, $filter, dataService, authService) {
       var ctrl = this;
       ctrl.isInRole = $rootScope.isInRole;
       ctrl.isInRoles = $rootScope.isInRoles;
@@ -30,8 +32,13 @@
       ctrl.changeStatusConfirmed = async function (status) {
         $rootScope.isBusy = true;
         ctrl.register.obj.status = status;
+        const d = $filter("utcToLocal")(new Date().toISOString());
+        const logs = `${ctrl.register.obj.logs || ""}| \r\n${status}-${
+          authService.authentication.userName
+        }-${d}`;
         var save = await dataService.saveValues(ctrl.register.id, {
           status: ctrl.register.obj.status,
+          logs: logs,
           sms_status: null,
         });
         if (save.isSucceed) {

@@ -292,29 +292,34 @@ app.factory("AuthService", [
             var data = response.data.data;
 
             if (data) {
-              var authData = {
-                userRoles: data.userData.userRoles,
-                token: data.access_token,
-                userName: data.userData.firstName,
-                roleNames: data.userData.roles.map(
-                  (i) => i.role.normalizedName
-                ),
-                avatar: data.userData.avatar,
-                refresh_token: data.refresh_token,
-                userId: data.userData.id,
-              };
-              var encrypted = $rootScope.encrypt(JSON.stringify(authData));
-              localStorageService.set("authorizationData", encrypted);
-              authData.token = data.access_token;
-              authData.refresh_token = data.refresh_token;
-              _authentication.token = data.access_token;
-              _authentication.refresh_token = data.refresh_token;
-              if (
-                !$rootScope.globalSettings.lastUpdateConfiguration ||
-                $rootScope.globalSettings.lastUpdateConfiguration <
-                  data.lastUpdateConfiguration
-              ) {
-                _initSettings();
+              try {
+                var authData = {
+                  userRoles: data.userData.userRoles,
+                  token: data.access_token,
+                  userName: data.userData.firstName,
+                  roleNames: data.userData.roles.map(
+                    (i) => i.role.normalizedName
+                  ),
+                  avatar: data.userData.avatar,
+                  refresh_token: data.refresh_token,
+                  userId: data.userData.id,
+                };
+                var encrypted = $rootScope.encrypt(JSON.stringify(authData));
+                localStorageService.set("authorizationData", encrypted);
+                authData.token = data.access_token;
+                authData.refresh_token = data.refresh_token;
+                _authentication.token = data.access_token;
+                _authentication.refresh_token = data.refresh_token;
+                if (
+                  !$rootScope.globalSettings.lastUpdateConfiguration ||
+                  $rootScope.globalSettings.lastUpdateConfiguration <
+                    data.lastUpdateConfiguration
+                ) {
+                  _initSettings();
+                }
+              } catch (e) {
+                _logOut();
+                deferred.reject(e);
               }
             }
 
