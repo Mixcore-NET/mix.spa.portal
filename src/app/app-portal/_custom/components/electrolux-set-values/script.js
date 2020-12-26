@@ -33,6 +33,7 @@ modules.component("electroluxSetValues", {
       ctrl.settings = $rootScope.globalSettings;
       ctrl.isInRole = $rootScope.isInRole;
       ctrl.isInRoles = $rootScope.isInRoles;
+
       ctrl.$onInit = async function () {
         if (!ctrl.selectedList) {
           ctrl.selectedList = {
@@ -51,16 +52,19 @@ modules.component("electroluxSetValues", {
         }
         ctrl.filterFields();
       };
+
       ctrl.filterFields = function () {
         if ($rootScope.isInRole("QC")) {
           const qcCols = ["ho_va_ten", "so_dien_thoai", "admin"];
           ctrl.fields = ctrl.fields.filter((m) => qcCols.includes(m.name));
         }
+
         if ($rootScope.isInRole("Admin")) {
           const qcCols = ["ho_va_ten", "so_dien_thoai", "cmnd"];
           ctrl.fields = ctrl.fields.filter((m) => qcCols.includes(m.name));
         }
       };
+
       ctrl.select = function (item) {
         if (item.isSelected) {
           if (ctrl.selectSingle == "true") {
@@ -80,6 +84,7 @@ modules.component("electroluxSetValues", {
           $rootScope.removeObject(ctrl.selectedList, item.id);
         }
       };
+      
       ctrl.selectAll = function (isSelected) {
         ctrl.selectedList.data = [];
         angular.forEach(ctrl.data, function (e) {

@@ -47,6 +47,18 @@
               class="btn btn-sm btn-danger text-white float-right px-4 mr-2"
               ><i class="fas fa-envelope"></i> Send All Rejected Sms</a
             >
+            <a
+              ng-if="isInRoles(['QC', 'SuperAdmin'])"
+              ng-click="sendSmsByStatus('Paid')"
+              class="btn btn-sm btn-info text-white float-right px-4 mr-2"
+              ><i class="fas fa-envelope"></i> Send All Paid Sms
+            </a>
+            <a
+              ng-if="isInRoles(['QC', 'SuperAdmin'])"
+              ng-click="sendSmsByStatus('UnPaid')"
+              class="btn btn-sm btn-secondary text-white float-right px-4 mr-2"
+              ><i class="fas fa-envelope"></i> Send All UnPaid Sms
+            </a>
           </div>
           <div ng-if="isInit" ng-init="getList()" class="col-md-12 mb-3">
             <div class="row">
