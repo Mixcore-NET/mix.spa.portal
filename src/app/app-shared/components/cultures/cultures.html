@@ -7,7 +7,7 @@
 
     </h6>
 
-    <div id="language-tab" class="card-body collapse">
+    <div id="language-tab" class="card-body collapse-x">
         <div ng-repeat="culture in $ctrl.data" class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" ng-model="culture.isSupported" id="culture_{{$index}}">
             <label class="custom-control-label" for="culture_{{$index}}"><span class="flag-icon {{culture.icon}}"></span> <span ng-bind="culture.description"></span></label>
