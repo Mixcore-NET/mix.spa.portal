@@ -1,35 +1,35 @@
 <div ng-init="loadSettings()"></div>
-<form class="needs-validation" novalidate>
-    <h1 class="lead">Hi there! We're setting up your website.
+<form class="needs-validation" novalidate autocomplete="off">
+    <h1 class="lead mb-5">Hi there! Let start the first steps together.
     </h1>
-    <hr>
-    <div class="intruction-labels">
+    <!-- <hr> -->
+    <div class="intruction-labels mb-5">
         <div class="form-group">
-            <label>
-                Your Website Name
-            </label>
+            <h6 class="text-primary">
+                Your site title
+            </h6>
             <input type="text" ng-model="initCmsModel.siteName" class="form-control" required placeholder="My Best Site Ever! - Mixcore CMS" value="My Best Site Ever! - Mixcore CMS">
         </div>
-        <div class="form-group">
+        <div class="form-group mb-5">
             <label>
-                1st Culture & Language
+                Your 1st culture & language
             </label>
             <select id="inputState" class="form-control custom-select custom-select-sm"
                 ng-options="item as item.fullName for item in settings.cultures track by item.specificulture"
                 ng-model="initCmsModel.culture">
             </select>
         </div>
-        <hr class="mt-4">
-        <div class="form-group pb-4">
-            <strong class="col-8 strong pl-0">
+        <!-- <hr class="mt-4"> -->
+        <div class="form-group">
+            <h6 class="text-primary">
                 Database Configuration
-                <div class="float-right">
+                <!-- <div class="float-right">
                     <div class="btn-group  pl-sm-0" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-primary active" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal" ng-class="{ 'active' : !initCmsModel.isUseLocal }">Remote</button>
                         <button type="button" class="btn btn-primary" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal" ng-class="{ 'active' : initCmsModel.isUseLocal }">Local</button>
                     </div>
-                </div>
-            </strong>
+                </div> -->
+            </h6>
             <!-- <div class="col-4 text-right">
                 <span style="cursor: pointer;" ng-click="initCmsModel.isUseLocal=!initCmsModel.isUseLocal">
                     <span data-toggle="tooltip" data-placement="top" title="Click to change to remote database."
@@ -43,7 +43,7 @@
 
         </div>
         <div class="form-group" ng-show="!initCmsModel.isUseLocal">
-            <label>Server</label>
+            <label>Server type</label>
             <select class="custom-select form-control" ng-options="item as item.text for item in settings.providers"
                 ng-model="dbProvider" ng-change="updateDbProvider()">
             </select>
@@ -58,7 +58,7 @@
         </mssql-local-info>
     </div>
 
-    <hr class="mt-4">
+    <!-- <hr class="mt-4"> -->
     <div class="text-right">
         <button ng-if="!initCmsModel.isUseLocal" ng-click="initCms();" class="btn btn-primary" style="min-width:200px"
             ng-disabled="!initCmsModel.databaseServer || !initCmsModel.databaseName || !initCmsModel.databaseUser || !initCmsModel.culture">

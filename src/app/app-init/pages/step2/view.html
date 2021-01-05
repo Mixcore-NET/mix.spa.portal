@@ -1,11 +1,10 @@
-<form ng-class="{'submitted': submitted}" ng-submit="register()">
+<form ng-class="{'submitted': submitted}" ng-submit="register()" autocomplete="off">
     <div class="">
-        <h1 class="lead">We are now creating your most powerful account!
+        <h1 class="lead mb-5">We are now creating your most powerful account!
         </h1>
-        <hr>
         <div class="form-group">
-            <label>Administrator Username</label>
-            <input ng-model="user.userName" class="form-control" required placeholder="handsome...">
+            <h6 class="text-primary">Administrator username</h6>
+            <input ng-model="user.userName" class="form-control" required placeholder="administrator" autocomplete="off">
         </div>
         <div class="row">
             <div class="col">
@@ -35,15 +34,15 @@
                 placeholder="your-email-address@domain.com">
         </div>
 
-        <p class="text-info">
+        <p class="text-danger">
             * Please keep this account credential safe and only share this account to your most trusted!
         </p>
-        <hr class="mt-4">
-        <div class="form-group">
+        <!-- <hr class="mt-4"> -->
+        <div class="form-group mb-5">
             <label class="custom-control custom-checkbox">
                 <input ng-model="user.isAgreed" class="custom-control-input" type="checkbox" required>
                 <span class="custom-control-label">
-                    I agree to the <a href="#" data-toggle="modal" data-target="#termAndCondition">terms and
+                    I agree to the <a href="https://mixcore.org/terms-and-conditions.html" target="_blank">terms and
                         conditions</a>.</span>
             </label>
             <div id="notTNCYetChecked" class="invalid-feedback" style="padding-left: 24px;">
