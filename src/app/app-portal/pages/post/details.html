@@ -126,7 +126,7 @@
               <label class="control-label">Post type</label>
               <select
                 ng-init="loadPostTypes()"
-                class="custom-select"
+                class="form-select"
                 ng-options="item.obj.attribute_set_name as item.obj.title for item in postTypes track by item.id"
                 ng-change="onSelectType()"
                 ng-model="activedData.type"
@@ -142,7 +142,7 @@
                   ></span>
                 </div>
                 <select
-                  class="custom-select"
+                  class="form-select"
                   ng-options="item as item.fileName for item in activedData.templates track by item.id"
                   ng-model="activedData.view"
                 ></select>
