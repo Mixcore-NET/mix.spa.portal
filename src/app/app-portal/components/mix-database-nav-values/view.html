@@ -1,3 +1,13 @@
+<div class="row">
+  <div class="col-md-12 mb-3">
+    <a
+      href="{{$ctrl.createUrl}}"
+      class="btn btn-sm btn-primary float-end px-4 me-2 text-white"
+    >
+      <i class="fas fa-plus"></i> Create data
+    </a>
+  </div>
+</div>
 <div
   class="alert alert-warning mb-0"
   role="alert"
@@ -47,11 +57,14 @@
         <div
           ng-if="$index < $ctrl.maxCol"
           ng-repeat="column in $ctrl.columns | orderBy: 'priority' track by $index"
-          class="col-md-3">
+          class="col-md-3"
+        >
           <mix-column-preview
             model="item.attributeData.obj[column.name]"
             column="column"
-          ></mix-column-preview>
+            max-length="120"
+          >
+          </mix-column-preview>
         </div>
         <div class="col text-end">
           <div

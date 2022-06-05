@@ -1,29 +1,31 @@
 <div class="row mb-3">
-    <label class="col-4 control-label" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.columnTitle"></label>
-    <div class="col-8" ng-switch="$ctrl.dataType">
+    <label class="col-12 control-label" ng-if="$ctrl.isShowTitle=='true'" ng-bind="$ctrl.columnTitle"></label>
+    <div class="col-12" ng-switch="$ctrl.dataType.toLowerCase()">
         <div ng-switch-default>
             <!--custom-->
+
             <input class="form-control {{$ctrl.inputClass}}" type="text" ng-model="$ctrl.data.value"
                 placeholder="{{$ctrl.columnTitle}}" />
         </div>
         <div ng-switch-when="datetime">
             <!--datetime-->
-            <input class="form-control {{$ctrl.inputClass}}" type="datetime-local" ng-model="$ctrl.data.value"
-                placeholder="{{$ctrl.columnTitle}}" />
+            <input class="form-control {{$ctrl.inputClass}}" type="datetime-local" ng-model="$ctrl.obj"
+                ng-change="$ctrl.updateValue()" placeholder="{{$ctrl.columnTitle}}" />
         </div>
         <div ng-switch-when="date">
             <!--date-->
-            <input class="form-control {{$ctrl.inputClass}}" type="date" ng-model="$ctrl.data.value"
-                placeholder="{{$ctrl.columnTitle}}" />
+            <input class="form-control {{$ctrl.inputClass}}" type="date" ng-model="$ctrl.obj"
+                ng-change="$ctrl.updateValue()" placeholder="{{$ctrl.columnTitle}}" />
         </div>
         <div ng-switch-when="time">
             <!--time-->
-            <input class="form-control {{$ctrl.inputClass}}" type="time" ng-model="$ctrl.data.value"
-                placeholder="{{$ctrl.columnTitle}}" />
+            <input class="form-control {{$ctrl.inputClass}}" value="{{$ctrl.data.value}}" type="time"
+                ng-model="$ctrl.obj" ng-change="$ctrl.updateValue()" placeholder="{{$ctrl.columnTitle}}" />
         </div>
-        <div ng-switch-when="html">
+        <div ng-switch-when="html" class="w-100">
             <!--Html-->
-            <quill-editor content="$ctrl.data.value"></quill-editor>
+            <!-- <quill-editor content="$ctrl.data.value"></quill-editor> -->
+            <trumbowyg ng-model="$ctrl.data.value"></trumbowyg>
         </div>
         <div ng-switch-when="multilinetext">
             <!--TextArea-->
@@ -69,9 +71,8 @@
         </div>
         <div ng-switch-when="boolean">
             <!--Boolean-->
-
-            <input class="{{$ctrl.inputClass}}" type="checkbox" placeholder="{{$ctrl.columnTitle}}"
-                ng-model="$ctrl.data.value" ng-checked="$ctrl.data.value=='true'" />
+            <input class="{{$ctrl.inputClass}}" type="checkbox" placeholder="{{$ctrl.columnTitle}}" ng-model="$ctrl.obj"
+                ng-change="$ctrl.updateValue()" />
         </div>
         <div ng-switch-when="icon">
             <mix-select-icons prefix="'fab'" options="$ctrl.icons" data="$ctrl.data.value"></mix-select-icons>

@@ -20,18 +20,18 @@
         </div>
         <div class="text-muted" ng-switch-when="datetime">
             <!--datetime-->
-            <input class="form-control {{$ctrl.inputClass}}" type="datetime-local"
-                ng-model="$ctrl.model.obj[$ctrl.column.name]" placeholder="{{$ctrl.translate($ctrl.column.title)}}" />
+            <input class="form-control {{$ctrl.inputClass}}" type="datetime-local" ng-model="$ctrl.obj"
+                ng-change="$ctrl.updateValue()" placeholder="{{$ctrl.translate($ctrl.column.title)}}" />
         </div>
         <div class="text-muted" ng-switch-when="date">
             <!--date-->
-            <input class="form-control {{$ctrl.inputClass}}" type="date" ng-model="$ctrl.model.obj[$ctrl.column.name]"
-                placeholder="{{$ctrl.translate($ctrl.column.title)}}" />
+            <input class="form-control {{$ctrl.inputClass}}" type="date" ng-model="$ctrl.obj"
+                ng-change="$ctrl.updateValue()" placeholder="{{$ctrl.translate($ctrl.column.title)}}" />
         </div>
         <div class="text-muted" ng-switch-when="time">
             <!--time-->
-            <input class="form-control {{$ctrl.inputClass}}" type="time" ng-model="$ctrl.model.obj[$ctrl.column.name]"
-                placeholder="{{$ctrl.translate($ctrl.column.title)}}" />
+            <input class="form-control {{$ctrl.inputClass}}" type="time" ng-model="$ctrl.obj"
+                ng-change="$ctrl.updateValue()" placeholder="{{$ctrl.translate($ctrl.column.title)}}" />
         </div>
         <div class="text-muted" ng-switch-when="phonenumber">
             <!--phonenumber-->
@@ -58,7 +58,8 @@
         </div>
         <div class="text-muted" ng-switch-when="html">
             <!--Html-->
-            <quill-editor content="$ctrl.model.obj[$ctrl.column.name]"></quill-editor>
+            <!-- <quill-editor content="$ctrl.model.obj[$ctrl.column.name]"></quill-editor> -->
+            <trumbowyg ng-model="$ctrl.model.obj[$ctrl.column.name]"></trumbowyg>
         </div>
         <div class="text-muted" ng-switch-when="multilinetext">
             <!--TextArea-->
@@ -83,17 +84,10 @@
         </div>
         <div class="text-muted col-6 p-0" ng-switch-when="upload">
             <!--upload-->
-            <media-file-upload ng-if="!$ctrl.column.columnConfigurations.upload.isCrop" header="'Media Upload'"
-                type="'Medias'" folder="'Medias'" auto="'true'"
-                accept-types="$ctrl.column.columnConfigurations.upload.accepts"
-                src-url="$ctrl.model.obj[$ctrl.column.name]" src="$ctrl.model.obj[$ctrl.column.name]"
-                media-file="$ctrl.mediaFile" form-file="formFile">
+            <media-file-upload header="'Media Upload'" type="'Medias'" folder="'Medias'" auto="'true'"
+                upload-options="$ctrl.column.columnConfigurations.upload" src-url="$ctrl.model.obj[$ctrl.column.name]"
+                src="$ctrl.model.obj[$ctrl.column.name]" media-file="$ctrl.mediaFile">
             </media-file-upload>
-            <custom-image ng-if="$ctrl.column.columnConfigurations.upload.isCrop" header="'Image'" type="'Medias'"
-                w="$ctrl.column.columnConfigurations.upload.width" h="$ctrl.column.columnConfigurations.upload.height"
-                folder="'Medias'" src-url="$ctrl.model.obj[$ctrl.column.name]" src="$ctrl.model.obj[$ctrl.column.name]"
-                auto="'true'">
-            </custom-image>
         </div>
         <div class="text-muted" ng-switch-when="color">
             <!--Color-->
@@ -107,8 +101,8 @@
             <!--Boolean-->
             <div class="form-check">
                 <input class="form-check-input {{$ctrl.inputClass}}" type="checkbox"
-                    placeholder="{{$ctrl.translate($ctrl.column.title)}}" ng-model="$ctrl.model.obj[$ctrl.column.name]"
-                    ng-checked="$ctrl.model.obj[$ctrl.column.name]" />
+                    placeholder="{{$ctrl.translate($ctrl.column.title)}}"
+                    ng-model="$ctrl.model.obj[$ctrl.column.name]" />
                 <lable ng-bind="$ctrl.model.obj[$ctrl.column.name]" class="form-check-label"></label>
             </div>
         </div>
@@ -124,19 +118,15 @@
         </div>
         <div class="text-muted" ng-switch-when="reference">
             <!-- Referrence -->
-            <div class="alert alert-warning" role="alert" ng-if="!$ctrl.model.id">
+            <div class="alert alert-warning" role="alert" ng-if="!$ctrl.parentId">
                 <i class="fas fa-exclamation-triangle me-3"></i> Please save the current
                 item to initialization a parent ID before input it child's data!
             </div>
-            <div class="row" ng-if="$ctrl.model.id">
-                <div class="col-md-12 mb-3">
-                    <a href="{{$ctrl.createUrl}}" class="btn btn-sm btn-primary float-end px-4 me-2 text-white">
-                        <i class="fas fa-plus"></i> Create data
-                    </a>
-                </div>
+            <div class="row" ng-if="$ctrl.parentId">                
                 <div class="col-md-12">
                     <mix-database-nav-values mix-database-id="$ctrl.column.referenceId" parent-id="$ctrl.model.id"
                         parent-type="'Set'" create-url="$ctrl.createUrl" update-url="$ctrl.updateUrl"
+                        back-url="$ctrl.backUrl"
                         on-update="$ctrl.updateRefData(data)" on-delete="$ctrl.removeRefData(data)">
                     </mix-database-nav-values>
                 </div>
@@ -145,6 +135,17 @@
         <div class="text-muted" ng-switch-when="qrcode">
             <!--Text-->
             <qr-code model="$ctrl.model.obj[$ctrl.column.name]"></qr-code>
+        </div>
+        <div class="text-muted" ng-switch-when="json">
+            <!--Text-->
+            <monaco-editor content="$ctrl.model.obj[$ctrl.column.name] | json"
+                update-content="$ctrl.updateJsonContent(content)" ext="'.json'">
+            </monaco-editor>
+        </div>
+        <div class="text-muted" ng-switch-when="tag">
+            <!--Text-->
+            <tags-input ng-model="$ctrl.model.obj[$ctrl.column.name]">
+            </tags-input>
         </div>
     </div>
 </div>

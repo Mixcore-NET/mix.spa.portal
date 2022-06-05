@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="mb-3" ng-if="viewmodel">
                                             <label class=" form-label">Created Date Time</label>
-                                            <mix-date-editor is-readonly="'true'" utc-date="viewmodel.createdDateTime">
+                                            <mix-date-editor is-readonly="'false'" utc-date="viewmodel.createdDateTime">
                                             </mix-date-editor>
                                         </div>
                                         <div class="mb-3">
@@ -71,7 +71,6 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <!-- TODO: Hoang to check again -->
                                             <label class="form-label">Post type [
                                                 <a href="/portal/mix-database-data/create?mixDatabaseId=9&mixDatabaseName=post_type&mixDatabaseTitle=Post%20Type&dataId=default"
                                                     title="Add new post type to the list">
@@ -222,9 +221,9 @@
                         </pane-v>
                         <pane-v icon="fas fa-list" header="Related">
                             <div class="card card-body">
-                                <related-navs request="request" source-id="viewmodel.id"
-                                    culture="viewmodel.specificulture" prefix="'post'" navs="viewmodel.postNavs"
-                                    data="relatedData" load-data="getListRelated(pageIndex)">
+                                <related-navs request="request" source-id="viewmodel.id" categories="categories"
+                                    post-types="postTypes" culture="viewmodel.specificulture" prefix="'post'"
+                                    navs="viewmodel.postNavs" data="relatedData" load-data="getListRelated(pageIndex)">
                                 </related-navs>
                             </div>
 

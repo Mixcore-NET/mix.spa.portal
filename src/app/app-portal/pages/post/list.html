@@ -7,7 +7,7 @@
                         Listing
                     </div>
                     <h3 class="page-title">
-                        All Posts
+                        All Posts (<span ng-bind="data.totalItems"></span> items)
                     </h3>
                 </div>
             </div>
@@ -18,14 +18,10 @@
         <aside class="bd-sidebar sub-sidebar">
             <nav class="bd-links p-3" aria-label="Sub-section navigation">
                 <div class="card card-body">
-                    <filter-list request="request" callback="getList(pageIndex)" create-url="createUrl"
-                        create-text="'Create Post'">
-                    </filter-list>
-
-                    <select class="form-select my-3"
-                        ng-options="item as item.title for item in postTypes track by item.title"
-                        ng-change="onSelectType();" ng-model="postType"></select>
-                    <select class="form-select" ng-model="selectedList.action">
+                    <post-filter-list request="request" categories="categories" post-types="postTypes"
+                        callback="getList(pageIndex)" create-url="createUrl" create-text="'Create Post'">
+                    </post-filter-list>
+                    <select ng-if="isAdmin" class="form-select" ng-model="selectedList.action">
                         <option ng-repeat="item in actions" ng-value="item">{{item}}</option>
                     </select>
                     <button type="button" class="btn btn-sm btn-primary mt-3"
@@ -66,7 +62,7 @@
                                 <th class="col text-secondary text-xxs font-weight-bolder opacity-7">
                                     Author</th>
                                 <th class="col text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Status</th>
+                                </th>
 
                                 <th class="col-1 text-secondary text-xxs font-weight-bolder opacity-7">
                                 </th>
@@ -96,7 +92,8 @@
                                 </td>
                                 <td>
                                     <a href="" ng-click="goToPath('/portal/post/details/' + item.id)" class="btn-link"
-                                        title="{{item.title}} - {{item.excerpt}}" data-bs-toggle="tooltip" ng-bind="item.title|trim:200">
+                                        title="{{item.title}} - {{item.excerpt}}" data-bs-toggle="tooltip"
+                                        ng-bind="item.title|trim:200">
 
                                     </a>
                                 </td>

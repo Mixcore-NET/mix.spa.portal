@@ -28,10 +28,6 @@
                             <span ng-bind="translate('Save')"></span>
                         </button>
                     </div>
-                    <custom-image auto="'true'" header="'Avatar'" type="'Users'" folder="'Avatars'"
-                        src-url="activedUser.user.avatar" src="activedUser.user.avatar"
-                        posted-file="activedUser.mediaFile">
-                    </custom-image>
                 </div>
             </nav>
         </aside>
@@ -47,7 +43,8 @@
                         <form ng-if="activedUser" ng-class="{'submitted': submitted}" ng-submit="saveUser(activedUser)">
                             <div class="mb-3">
                                 <label class="form-label">Username</label>
-                                <input type="text" class="form-control form-control-lg" readonly ng-model="activedUser.user.userName" />
+                                <input type="text" class="form-control form-control-lg" readonly
+                                    ng-model="activedUser.user.userName" />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Email</label>

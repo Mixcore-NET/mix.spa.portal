@@ -4,6 +4,7 @@
   bindings: {
     model: "=",
     column: "=",
+    parentId: "=?",
     isShowTitle: "=?",
     inputClass: "=?",
     createUrl: "=?",
@@ -14,14 +15,14 @@
   controller: [
     "$rootScope",
     "$scope",
-    "$location",
+    "$routeParams",
     "ngAppSettings",
     "$filter",
     "ApiService",
     function (
       $rootScope,
       $scope,
-      $location,
+      $routeParams,
       ngAppSettings,
       $filter,
       apiService
@@ -139,8 +140,7 @@
         );
       };
       ctrl.buildCreateUrl = function () {
-        var backUrl = encodeURIComponent($location.url());
-        ctrl.createUrl = `/portal/mix-database-data/create?mixDatabaseId=${ctrl.column.referenceId}&dataId=default&parentId=${ctrl.model.id}&parentType=Set&backUrl=${backUrl}`;
+        ctrl.createUrl = `/portal/mix-database-data/create?mixDatabaseId=${ctrl.column.referenceId}&dataId=default&parentId=${ctrl.model.id}&parentType=Set`;
       };
       ctrl.initData = async function () {
         setTimeout(() => {
@@ -149,11 +149,7 @@
             case "date":
             case "time":
               if (ctrl.model.obj[ctrl.column.name]) {
-                var local = $filter("utcToLocalTime")(
-                  ctrl.model.obj[ctrl.column.name]
-                );
-                ctrl.model.obj[ctrl.column.name] = new Date(local);
-                $scope.$apply();
+                ctrl.obj = new Date(ctrl.model.obj[ctrl.column.name]);
               }
               break;
             case "reference": // reference
@@ -188,7 +184,7 @@
           case "date":
           case "time":
             if (ctrl.column.defaultValue) {
-              ctrl.model[ctrl.column.name] = new Date(
+              ctrl.obj = new Date(
                 ctrl.mixDatabaseDataValue.column.defaultValue
               );
             }
@@ -207,6 +203,35 @@
             }
             break;
 
+          default:
+            if (ctrl.column.defaultValue) {
+              ctrl.model[ctrl.column.name] = ctrl.column.defaultValue;
+            }
+            break;
+        }
+      };
+      ctrl.updateJsonContent = function (content) {
+        ctrl.model.obj[ctrl.column.name] = JSON.parse(content);
+        $scope.$apply();
+      };
+      ctrl.updateValue = function () {
+        switch (ctrl.column.dataType.toLowerCase()) {
+          case "datetime":
+            if (ctrl.obj) {
+              ctrl.model.obj[ctrl.column.name] = ctrl.obj.toLocaleString();
+            }
+            break;
+          case "date":
+            if (ctrl.obj) {
+              ctrl.model.obj[ctrl.column.name] = ctrl.obj.toLocaleDateString();
+            }
+            break;
+          case "time":
+            if (ctrl.obj) {
+              ctrl.model.obj[ctrl.column.name] =
+                ctrl.obj.toLocaleTimeString("en-GB");
+            }
+            break;
           default:
             if (ctrl.column.defaultValue) {
               ctrl.model[ctrl.column.name] = ctrl.column.defaultValue;

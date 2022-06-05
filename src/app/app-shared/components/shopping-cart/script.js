@@ -1,18 +1,17 @@
-﻿modules.component("shoppingCart", {
-  templateUrl: "/mix-app/views/app-client/components/shopping-cart/view.html",
+﻿sharedComponents.component("shoppingCart", {
+  templateUrl: "/mix-app/views/app-shared/components/shopping-cart/view.html",
   bindings: {
     cartData: "=?",
     successCallback: "&?",
   },
   controller: "ShoppingCartController",
 });
-modules.controller("ShoppingCartController", [
+sharedComponents.controller("ShoppingCartController", [
   "$rootScope",
   "$scope",
-  "$element",
   "localStorageService",
   "RestMixDatabaseDataClientService",
-  function ($rootScope, $scope, $element, localStorageService, dataService) {
+  function ($rootScope, $scope, localStorageService, dataService) {
     $scope.submitted = false;
     $scope.isShow = false;
     $scope.init = function (validateCallback, successCallback, failCallback) {
@@ -37,20 +36,26 @@ modules.controller("ShoppingCartController", [
       $scope.cartData.items.splice(index, 1);
       $scope.calculate();
     };
+
     $scope.submit = async function () {
       $scope.onValidate();
       if ($scope.frmCheckOut.$valid) {
+        $scope.isBusy = true;
         $rootScope.submitting = true;
         var result = await dataService.saveData(
           "shoppingCart",
           $scope.cartData
         );
         if (result.isSucceed) {
+          $scope.isBusy = false;
+          $scope.cartData = result.data.obj;
+          $scope.$apply();
           $scope.onSuccess(result.data);
         } else {
+          $scope.isBusy = false;
+          $scope.$apply();
           $scope.onFail(result.errors);
         }
-        $scope.$apply();
       }
     };
 
@@ -66,15 +71,7 @@ modules.controller("ShoppingCartController", [
       }
     };
     $scope.onSuccess = function (resp) {
-      setTimeout(() => {
-        $scope.submitting = false;
-      }, 1000);
-      $scope.cartData = {
-        items: [],
-        totalItem: 0,
-        total: 0,
-      };
-      localStorageService.set("shoppingCart", $scope.cartData);
+      localStorageService.set("shoppingCart", resp.obj);
 
       if ($scope.successCallback) {
         $rootScope.executeFunctionByName(
@@ -83,10 +80,20 @@ modules.controller("ShoppingCartController", [
           window
         );
       } else {
+        setTimeout(() => {
+          $scope.submitting = false;
+        }, 1000);
+        $scope.cartData = {
+          items: [],
+          totalItem: 0,
+          total: 0,
+        };
+        localStorageService.set("shoppingCart", $scope.cartData);
         window.location.href = "/";
       }
     };
     $scope.onFail = function (errors) {
+      $scope.errors = errors;
       if ($scope.failCallback) {
         $rootScope.executeFunctionByName($scope.failCallback, [errors], window);
       }

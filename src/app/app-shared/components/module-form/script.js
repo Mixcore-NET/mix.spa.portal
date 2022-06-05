@@ -57,6 +57,15 @@
             ctrl.data.postId = ctrl.postId;
             ctrl.data.productId = ctrl.productId;
             ctrl.data.categoryId = ctrl.categoryId;
+            angular.forEach(ctrl.data.dataProperties, function (e) {
+              if (!ctrl.data.jItem[e.name]) {
+                ctrl.data.jItem[e.name] = {
+                  dataType: e.dataType,
+                  value: null,
+                };
+              }
+            });
+
             $rootScope.isBusy = false;
             $scope.$apply();
           } else {
@@ -97,7 +106,7 @@
       ctrl.saveModuleData = async function () {
         $rootScope.isBusy = true;
         var form = $("#module-" + ctrl.data.moduleId);
-
+        console.log(ctrl.data);
         $.each(ctrl.data.dataProperties, function (i, e) {
           switch (e.dataType) {
             case 5:
@@ -122,7 +131,7 @@
           } else {
             var msg = $rootScope.translate("success");
             $rootScope.showMessage(msg, "success");
-            ctrl.initModuleForm();
+            // ctrl.initModuleForm();
             $rootScope.isBusy = false;
             $scope.$apply();
           }

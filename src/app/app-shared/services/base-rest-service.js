@@ -180,6 +180,15 @@ appShared.factory("BaseRestService", [
       return await this.getRestApiResult(req);
     };
 
+    var _saveMany = async function (models) {
+      var req = {
+        method: "POST",
+        url: this.prefixUrl + "/save-many",
+        data: JSON.stringify(models),
+      };
+      return await this.getRestApiResult(req);
+    };
+
     var _applyList = async function (objData) {
       var url = this.prefixUrl + "/list-action";
       var req = {
@@ -211,6 +220,9 @@ appShared.factory("BaseRestService", [
     var _parseQuery = function (req) {
       var result = "";
       if (req) {
+        if (angular.isObject(req.query)) {
+          req.query = JSON.stringify(req.query);
+        }
         for (var key in req) {
           if (req.hasOwnProperty(key)) {
             if (result != "") {
@@ -272,6 +284,7 @@ appShared.factory("BaseRestService", [
     serviceFactory.update = _update;
     serviceFactory.save = _save;
     serviceFactory.saveFields = _saveFields;
+    serviceFactory.saveMany = _saveMany;
     serviceFactory.delete = _delete;
     serviceFactory.ajaxSubmitForm = _ajaxSubmitForm;
     serviceFactory.parseQuery = _parseQuery;

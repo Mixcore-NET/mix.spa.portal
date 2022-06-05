@@ -13,25 +13,29 @@
                 <div class="input-group input-group-sm">
                     <div class="input-group-text"><i class="fas fa-search"></i></div>
                     <input type="text" class="form-control" placeholder="{{col.title}}"
-                        ng-model="$ctrl.queries[col.name]" ng-enter="$ctrl.onFilterList()" />
+                        ng-model="$ctrl.queries[col.name]" ng-enter="$ctrl.filter()" />
                 </div>
             </div>
             <!-- <small class="col-md-2">Author</small> -->
             <label class="col-md-2">Created</label>
             <div class="col-md-3">
-                <!-- <div class="input-group input-group-sm">
-          <select class="form-select form-select-sm me-2" ng-model="$ctrl.filterType">
-            <option ng-repeat="item in $ctrl.filterTypes" ng-value="item">{{item}}</option>
-          </select>
-        </div> -->
+                <div class="input-group input-group-sm">
+                    <select class="form-select form-select-sm me-2" ng-model="$ctrl.filterType">
+                        <option ng-repeat="item in $ctrl.filterTypes" ng-value="item">{{item}}</option>
+                    </select>
+                    <select class="form-select form-select-sm me-2" ng-model="$ctrl.compareType">
+                        <option ng-repeat="item in $ctrl.compareTypes" ng-value="item">{{item}}</option>
+                    </select>
+                    <a class="btn" ng-click="$ctrl.filter()"><i class="fas fa-search"></i></a>
+                </div>
             </div>
         </div>
     </div>
     <div class="cardx">
         <div class="">
-            <div class="py-2" role="alert" ng-if="!$ctrl.data || !$ctrl.data.length">
-                <i class="fas fa-exclamation-triangle text-warning me-3"></i> No data
-                has been created for this table yet!
+            <div class="p-3" role="alert" ng-if="!$ctrl.data || !$ctrl.data.length">
+                <i class="fas fa-exclamation-triangle text-warning me-3"></i> No data has been created for this table
+                yet!
             </div>
 
             <ul class="list-group list-group-flush" dnd-list="$ctrl.data" dnd-inserted="$ctrl.updateOrders(index)"
@@ -68,13 +72,14 @@
                         </div>
                         <div ng-if="$index < 3"
                             ng-repeat="column in $ctrl.columns | orderBy: 'priority' track by $index" class="col-md-2">
-                            <mix-column-preview ng-if="column" model="item.obj[column.name]" column="column">
+                            <mix-column-preview ng-if="column" model="item.obj[column.name]" column="column"
+                                max-length="50">
                             </mix-column-preview>
                         </div>
                         <div class="col-md-2">
                             <small class="text-black-50 align-middle"
                                 title="{{item.createdDateTime | utcToLocal:'dd.MM.yy hh:mm a'}}">
-                                {{item.createdDateTime | utcToLocal:'dd.MM.yy'}} - {{item.createdBy}}
+                                {{item.createdDateTime | utcToLocal:'dd.MM.yy'}}
                             </small>
                         </div>
                         <div class="col-md-3 border-0">

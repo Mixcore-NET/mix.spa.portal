@@ -37,57 +37,60 @@ sharedComponents.component("trumbowyg", {
           "close",
         ],
         EVENTS_PREFIX = "tbw";
-      ctrl.editorConfigurations = {
-        core: {},
-        plugins: {
-          removeformatPasted: false,
-          imageWidthModalEdit: true,
-          semantic: false,
-          btnsDef: {
-            // Customizables dropdowns
-            image: {
-              dropdown: ["insertImage", "upload", "noembed"],
-              ico: "insertImage",
-            },
+      ctrl.options = {
+        svgPath: "/mix-app/assets/icons.svg",
+        removeformatPasted: false,
+        imageWidthModalEdit: true,
+        resetCss: true,
+        tagClasses: {
+          iframe: "w-100", // Tailwind CSS example
+        },
+        btnsDef: {
+          // Customizables dropdowns
+          image: {
+            dropdown: ["insertImage", "upload", "noembed"],
+            ico: "insertImage",
           },
-          btns: [
-            ["table"],
-            ["emoji"],
-            ["formatting"],
-            ["strong", "em", "del", "underline"],
-            ["fontsize"],
-            ["highlight"],
-            ["link"],
-            ["image"],
-            ["justifyLeft", "justifyCenter", "justifyRight", "justifyFull"],
-            ["unorderedList", "orderedList"],
-            ["foreColor", "backColor"],
-            ["preformatted"],
-            ["horizontalRule"],
-            ["fullscreen"],
-            ["viewHTML"],
-          ],
-          plugins: {
-            // Add imagur parameters to upload plugin
-            upload: {
-              serverPath: "https://api.imgur.com/3/image",
-              fileFieldName: "image",
-              headers: {
-                Authorization: "Client-ID 9e57cb1c4791cea",
-              },
-              urlPropertyName: "data.link",
+        },
+        btns: [
+          ["table"],
+          ["emoji"],
+          ["formatting"],
+          ["strong", "em", "del", "underline"],
+          ["fontsize"],
+          ["foreColor", "backColor"],
+          ["highlight"],
+          ["link"],
+          ["image"],
+          ["justifyLeft", "justifyCenter", "justifyRight", "justifyFull"],
+          ["unorderedList", "orderedList"],
+          ["indent", "outdent"],
+          ["preformatted"],
+          ["horizontalRule"],
+          ["fullscreen"],
+          ["viewHTML"],
+        ],
+        plugins: {
+          // Add imagur parameters to upload plugin
+          upload: {
+            serverPath: "/api/v1/vi-vn/media/upload-media",
+            fileFieldName: "file",
+            headers: {
+              Authorization: "Client-ID 9e57cb1c4791cea",
             },
-            table: {},
-            fontfamily: {
-              init: function (trumbowyg) {
-                trumbowyg.o.plugins.fontfamily =
-                  trumbowyg.o.plugins.fontfamily || defaultOptions;
-                trumbowyg.addBtnDef("fontfamily", {
-                  dropdown: buildDropdown(trumbowyg),
-                  hasIcon: false,
-                  text: trumbowyg.lang.fontFamily,
-                });
-              },
+            urlPropertyName: "data.fullPath",
+            statusPropertyName: "isSucceed",
+          },
+          table: {},
+          fontfamily: {
+            init: function (trumbowyg) {
+              trumbowyg.o.plugins.fontfamily =
+                trumbowyg.o.plugins.fontfamily || defaultOptions;
+              trumbowyg.addBtnDef("fontfamily", {
+                dropdown: buildDropdown(trumbowyg),
+                hasIcon: false,
+                text: trumbowyg.lang.fontFamily,
+              });
             },
           },
         },
@@ -113,13 +116,13 @@ sharedComponents.component("trumbowyg", {
         }
       };
 
-      ctrl.initializeEditor = (element, options) => {
+      ctrl.initializeEditor = (element) => {
         if (ctrl.removeformatPasted) {
-          ctrl.editorConfigurations.plugins.removeformatPasted =
+          ctrl.options.plugins.removeformatPasted =
             ctrl.removeformatPasted == "true";
         }
         element
-          .trumbowyg(ctrl.editorConfigurations.plugins)
+          .trumbowyg(ctrl.options)
           .on("tbwchange", () => ctrl.updateModelValue())
           .on("tbwpaste", () => ctrl.updateModelValue());
         angular.forEach(TBW_EVENTS, (event) => {
@@ -138,10 +141,8 @@ sharedComponents.component("trumbowyg", {
         if (changes.options && !changes.options.isFirstChange()) {
           element.trumbowyg("destroy");
         }
-
-        if (changes.options) {
-          ctrl.initializeEditor(element, angular.extend({}, ctrl.options));
-        }
+        ctrl.options = ctrl.options || {};
+        ctrl.initializeEditor(element);
 
         if (changes.ngDisabled) {
           element.trumbowyg(ctrl.ngDisabled ? "disable" : "enable");

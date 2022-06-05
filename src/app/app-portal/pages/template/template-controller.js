@@ -49,14 +49,13 @@ app.controller("TemplateController", [
     $scope.init = async function () {
       authService.fillAuthData().then(function () {
         $scope.user = {
-          username: authService.authentication.info.user.UserName,
-          avatar: authService.authentication.info.user.Avatar,
+          username: authService.authentication.info.username,
+          avatar: authService.authentication.info.userData.avatar,
         };
         $scope.startConnection("editFileHub", () => {
-          if ($routeParams.id) {
-            $scope.room = `Template-${$routeParams.id}`;
-            $scope.joinRoom();
-          }
+          let id = $routeParams.id || $rootScope.generateUUID();
+          $scope.room = `Template-${id}`;
+          $scope.joinRoom();
         });
       });
     };
@@ -191,8 +190,9 @@ app.controller("TemplateController", [
       switch (msg.type) {
         case "MemberList":
           $scope.members = msg.data;
-          $scope.isValid = $scope.members.length == 1;
-          if (!$scope.isValid) {
+          $scope.initMembersData();
+          $scope.canEdit = $scope.members.length == 1;
+          if (!$scope.canEdit) {
             $scope.errors = [
               "Cannot modify if there is another user opening this template",
             ];
@@ -206,6 +206,13 @@ app.controller("TemplateController", [
           break;
       }
       console.log(msg);
+    };
+    $scope.initMembersData = function () {
+      angular.forEach($scope.members, function (e) {
+        if (!e.Avatar) {
+          e.Avatar = "/mix-app/assets/img/user.png";
+        }
+      });
     };
   },
 ]);

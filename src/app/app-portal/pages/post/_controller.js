@@ -9,6 +9,7 @@ app.controller("PostController", [
   "PostRestService",
   "UrlAliasService",
   "RestMixDatabaseDataPortalService",
+  "RestMixDatabaseColumnPortalService",
   function (
     $scope,
     $rootScope,
@@ -18,7 +19,8 @@ app.controller("PostController", [
     $routeParams,
     service,
     urlAliasService,
-    dataService
+    dataService,
+    columnService
   ) {
     BaseRestCtrl.call(
       this,
@@ -38,6 +40,7 @@ app.controller("PostController", [
       databaseName: "",
       title: "All",
     };
+    $scope.cateRequest = angular.copy(ngAppSettings.request);
     $scope.postTypeRequest = angular.copy(ngAppSettings.request);
     $scope.postTypeRequest.mixDatabaseName = "post_type";
     $scope.postTypeRequest.orderBy = "Priority";
@@ -59,7 +62,17 @@ app.controller("PostController", [
       }
       $scope.pageName = "postList";
       await $scope.loadPostTypes();
+      await $scope.loadCategories();
       $scope.getList();
+    };
+    $scope.loadCategories = async function () {
+      $scope.cateRequest.mixDatabaseName = "sys_category";
+      var response = await dataService.getList($scope.cateRequest);
+      if (response.isSucceed) {
+        $scope.categories = response.data;
+        $scope.isBusy = false;
+        $scope.$apply();
+      }
     };
     $scope.loadPostTypes = async function () {
       let getTypes = await dataService.getList($scope.postTypeRequest);
@@ -104,7 +117,7 @@ app.controller("PostController", [
         }
 
         // $scope.viewmodel.createdDateTime = Date.now();
-        $scope.viewmodel.createdBy = $rootScope.authentication.userName;
+        $scope.viewmodel.createdBy = $rootScope.authentication.username;
 
         $rootScope.isBusy = false;
         $scope.$apply();
@@ -206,10 +219,20 @@ app.controller("PostController", [
         let result = await dataService.save($scope.additionalData);
         if (!result.isSucceed) {
           $rootScope.showErrors(result.errors);
+        } else {
+          $scope.additionalData = result.data;
+          $scope.saveColumns();
         }
       }
       $rootScope.isBusy = false;
       $scope.$apply();
+    };
+
+    $scope.saveColumns = async function () {
+      let result = await columnService.saveMany($scope.additionalData.columns);
+      if (result.isSucceed) {
+        $rootScope.showMessage("success", "success");
+      }
     };
     $scope.getSingleSuccessCallback = async function () {
       $scope.defaultThumbnailImgWidth =
@@ -230,6 +253,7 @@ app.controller("PostController", [
         "databaseName",
         $scope.request.postType
       );
+      await $scope.loadCategories();
       $scope.loadAdditionalData();
       if (moduleIds) {
         for (var moduleId of moduleIds.split(",")) {
@@ -246,7 +270,7 @@ app.controller("PostController", [
       if (pageIds) {
         for (var pageId of pageIds.split(",")) {
           var pageNav = $rootScope.findObjectByKey(
-            $scope.viewmodel.categories,
+            $scope.viewmodel.pages,
             "pageId",
             pageId
           );
@@ -298,6 +322,10 @@ app.controller("PostController", [
             $scope.viewmodel.title,
             "-"
           );
+          if ($scope.viewmodel.seoName.length > 50) {
+            $scope.viewmodel.seoName =
+              $scope.viewmodel.seoName.substring(0, 80) + "...";
+          }
         }
         if (
           $scope.viewmodel.seoTitle === null ||

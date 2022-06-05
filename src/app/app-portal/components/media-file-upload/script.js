@@ -7,11 +7,10 @@
     src: "=",
     srcUrl: "=",
     mediaFile: "=?",
-    formFile: "=",
     type: "=?",
     folder: "=?",
     auto: "=",
-    acceptTypes: "=?",
+    uploadOptions: "=?",
     onDelete: "&?",
     onUpdate: "&?",
     onInsert: "&?",
@@ -28,13 +27,18 @@
       ctrl.isImage = false;
       ctrl.mediaNavs = [];
       ctrl.$onInit = function () {
+        ctrl.autoSave = ctrl.auto === "true";
         ctrl.srcUrl = ctrl.srcUrl || image_placeholder;
         ctrl.mediaFile = ctrl.mediaFile || {};
         ctrl.isImage = ctrl.srcUrl
           .toLowerCase()
-          .match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg)/g);
+          .match(/([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png|svg|ico)/g);
         ctrl.maxHeight = ctrl.maxHeight || "200px";
         ctrl.id = Math.floor(Math.random() * 100);
+        if (ctrl.uploadOptions) {
+          ctrl.w = ctrl.uploadOptions.width;
+          ctrl.h = ctrl.uploadOptions.height;
+        }
       };
       ctrl.$doCheck = function () {
         if (ctrl.src !== ctrl.srcUrl && ctrl.srcUrl != image_placeholder) {
@@ -47,26 +51,27 @@
 
       ctrl.selectFile = function (files) {
         if (files !== undefined && files !== null && files.length > 0) {
-          ctrl.file = files[0];
+          ctrl.formFile = files[0];
           ctrl.mediaFile.fileFolder = ctrl.folder ? ctrl.folder : "Media";
           ctrl.mediaFile.title = ctrl.title ? ctrl.title : "";
           ctrl.mediaFile.description = ctrl.description ? ctrl.description : "";
-          ctrl.mediaFile.fileName = ctrl.file.name.substring(
+          ctrl.mediaFile.fileName = ctrl.formFile.name.substring(
             0,
-            ctrl.file.name.lastIndexOf(".")
+            ctrl.formFile.name.lastIndexOf(".")
           );
-          ctrl.mediaFile.extension = ctrl.file.name.substring(
-            ctrl.file.name.lastIndexOf(".")
+          ctrl.mediaFile.extension = ctrl.formFile.name.substring(
+            ctrl.formFile.name.lastIndexOf(".")
           );
-          if ($rootScope.isImage(ctrl.file)) {
+          if ($rootScope.isImage(ctrl.formFile)) {
             ctrl.canUpload = false;
-            mediaService.openCroppie(ctrl.file, ctrl, false);
+            mediaService.openCroppie(files[0], ctrl, ctrl.autoSave);
           } else {
-            ctrl.mediaFile.file = ctrl.file;
-            ctrl.formFile = ctrl.file;
+            ctrl.mediaFile.file = ctrl.formFile;
             ctrl.canUpload = true;
-            ctrl.uploadFile(ctrl.file);
-            // ctrl.getBase64(ctrl.file);
+            if (ctrl.autoSave) {
+              ctrl.uploadFile(ctrl.formFile);
+            }
+            // ctrl.getBase64(ctrl.formFile);
           }
         }
       };
@@ -74,10 +79,21 @@
       ctrl.croppieCallback = function (result) {
         if (result) {
           ctrl.isImage = true;
-          ctrl.mediaFile.fileStream = result;
-          ctrl.src = result;
-        } else if (ctrl.file) {
-          ctrl.uploadFile(ctrl.file);
+          if (!ctrl.autoSave) {
+            ctrl.src = result;
+            ctrl.mediaFile.fileStream = result;
+          } else {
+            ctrl.src = result.filePath;
+          }
+          $scope.$apply();
+        } else if (ctrl.formFile) {
+          if (ctrl.autoSave) {
+            ctrl.uploadFile(ctrl.formFile);
+          } else {
+            ctrl.mediaFile.file = ctrl.formFile;
+            ctrl.getBase64(ctrl.formFile);
+          }
+          //   ctrl.uploadFile(ctrl.formFile);
         }
       };
 

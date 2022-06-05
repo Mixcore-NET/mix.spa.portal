@@ -32,10 +32,19 @@ app.controller("ModulePostController", [
       $scope.request.orderBy !== "Priority" || $scope.request.direction !== "0";
     $scope.translate = $rootScope.translate;
     $scope.moduleIds = $routeParams.moduleIds || $routeParams.id;
-    $scope.pageIds = $routeParams.page_ids;
-    $scope.type = $routeParams.type;
-    $scope.getList = async function () {
+    $scope.pageIds = $routeParams.page_ids || "";
+    $scope.type = $routeParams.type || "";
+    $scope.template = $routeParams.template || "";
+
+    $scope.init = function () {
+      $scope.createUrl = `/portal/post/create?page_ids=${$scope.pageIds}&module_ids=${$scope.moduleIds}&type=${$scope.type}&template=${$scope.template}`;
+      $scope.getList();
+    };
+    $scope.getList = async function (pageIndex) {
       $rootScope.isBusy = true;
+      if (pageIndex !== undefined) {
+        $scope.request.pageIndex = pageIndex;
+      }
       var id = $routeParams.id;
       $scope.moduleId = $routeParams.id;
       $scope.request.query = "&module_id=" + id;

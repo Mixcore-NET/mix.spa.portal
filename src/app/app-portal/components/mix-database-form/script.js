@@ -3,7 +3,8 @@ modules.component("mixDatabaseForm", {
     "/mix-app/views/app-portal/components/mix-database-form/view.html",
   bindings: {
     mixDatabaseId: "=",
-    mixDatabaseName: "=",
+    mixDatabaseName: "=?",
+    mixDatabaseTitle: "=?",
     columns: "=?",
     mixDatabaseDataId: "=?",
     mixDatabaseData: "=",
@@ -20,12 +21,20 @@ modules.component("mixDatabaseForm", {
     "$scope",
     "$location",
     "$routeParams",
+    "RestMixDatabasePortalService",
     "RestMixDatabaseDataPortalService",
-    function ($rootScope, $scope, $location, $routeParams, service) {
+    function (
+      $rootScope,
+      $scope,
+      $location,
+      $routeParams,
+      databaseService,
+      service
+    ) {
       var ctrl = this;
       ctrl.isBusy = false;
       ctrl.attributes = [];
-
+      ctrl.isInRole = $rootScope.isInRole;
       ctrl.defaultData = null;
       ctrl.selectedProp = null;
       ctrl.localizeSettings = $rootScope.globalSettings;
@@ -38,6 +47,8 @@ modules.component("mixDatabaseForm", {
             If input is data id => load ctrl.mixDatabaseData from service and handle it independently
         */
         ctrl.isBusy = true;
+        var getDatabase = await databaseService.getSingle([ctrl.mixDatabaseId]);
+        ctrl.mixDatabase = getDatabase.data;
 
         if (ctrl.mixDatabaseDataId) {
           var getData = await service.getSingle([ctrl.mixDatabaseDataId]);
@@ -47,8 +58,10 @@ modules.component("mixDatabaseForm", {
             ctrl.mixDatabaseData.parentType = ctrl.parentType;
             ctrl.mixDatabaseId = ctrl.mixDatabaseData.mixDatabaseId;
             ctrl.mixDatabaseName = ctrl.mixDatabaseData.mixDatabaseName;
-            ctrl.mixDatabaseTitle = $routeParams.mixDatabaseTitle;
-            ctrl.backUrl = `/portal/mix-database-data/list?mixDatabaseId=${ctrl.mixDatabaseData.mixDatabaseId}&mixDatabaseName=${ctrl.mixDatabaseData.mixDatabaseName}&mixDatabaseTitle=test`;
+            ctrl.mixDatabaseTitle =
+              ctrl.mixDatabaseTitle ||
+              $routeParams.mixDatabaseTitle ||
+              ctrl.mixDatabaseName;
             await ctrl.loadDefaultModel();
             ctrl.isBusy = false;
             $scope.$apply();
@@ -60,8 +73,16 @@ modules.component("mixDatabaseForm", {
             $scope.$apply();
           }
         }
-        if ((ctrl.mixDatabaseName || ctrl.mixDatabaseId) && !ctrl.defaultData) {
+        if (ctrl.mixDatabaseName || ctrl.mixDatabaseId) {
+          var getDatabase = await databaseService.getSingle([
+            ctrl.mixDatabaseId,
+          ]);
+          ctrl.mixDatabase = getDatabase.data;
           await ctrl.loadDefaultModel();
+          ctrl.childBackUrl = $location.url();
+          ctrl.backUrl =
+            ctrl.backUrl ??
+            `/portal/mix-database-data/list?mixDatabaseId=${ctrl.mixDatabase.id}&mixDatabaseName=${ctrl.mixDatabase.name}&mixDatabaseTitle=${ctrl.mixDatabase.title}`;
           ctrl.isBusy = false;
           $scope.$apply();
         }
@@ -79,13 +100,17 @@ modules.component("mixDatabaseForm", {
               case "Post":
               case "Page":
               case "Module":
-                ctrl.backUrl = `/portal/${ctrl.parentType.toLowerCase()}/details/${
-                  ctrl.parentId
-                }`;
+                ctrl.backUrl =
+                  ctrl.backUrl ??
+                  `/portal/${ctrl.parentType.toLowerCase()}/details/${
+                    ctrl.parentId
+                  }`;
                 break;
 
               default:
-                ctrl.backUrl = `/portal/mix-database-data/details?dataId=${ctrl.parentId}&mixDatabaseId=${ctrl.mixDatabaseId}&mixDatabaseName=${ctrl.mixDatabaseName}&mixDatabaseTitle=${$routeParams.mixDatabaseTitle}`;
+                ctrl.backUrl =
+                  ctrl.backUrl ??
+                  `/portal/mix-database-data/details?dataId=${ctrl.parentId}&mixDatabaseId=${ctrl.mixDatabaseId}&mixDatabaseName=${ctrl.mixDatabaseName}&mixDatabaseTitle=${$routeParams.mixDatabaseTitle}`;
                 break;
             }
           }

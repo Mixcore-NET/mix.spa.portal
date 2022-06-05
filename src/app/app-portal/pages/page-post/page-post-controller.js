@@ -32,9 +32,9 @@ app.controller("PagePostController", [
     $scope.localizeSettings = $rootScope.globalSettings;
     $scope.init = function () {
       $scope.pageId = $routeParams.id;
-      $scope.type = $routeParams.type;
+      $scope.type = $routeParams.type || "";
       $scope.template = $routeParams.template || "";
-      $scope.pageIds = $routeParams.page_ids || $routeParams.id;
+      $scope.pageIds = $routeParams.page_ids || $routeParams.id || "";
       $scope.moduleIds = $routeParams.module_ids || "";
       $scope.canDrag =
         $scope.request.orderBy === "Priority" &&
@@ -48,14 +48,17 @@ app.controller("PagePostController", [
           ? "/portal/post/gallery-details"
           : "/portal/post/details";
     };
-    $scope.getList = async function () {
+    $scope.getList = async function (pageIndex) {
+      if (pageIndex !== undefined) {
+        $scope.request.pageIndex = pageIndex;
+      }
       $rootScope.isBusy = true;
       var id = $routeParams.id;
       $scope.request.query = "&page_id=" + id;
       var response = await service.getList($scope.request);
       $scope.canDrag =
-        $scope.request.orderBy !== "Priority" ||
-        $scope.request.direction !== "0";
+        $scope.request.orderBy === "Priority" &&
+        $scope.request.direction === "Asc";
       if (response.isSucceed) {
         $scope.data = response.data;
         $rootScope.isBusy = false;
@@ -79,6 +82,9 @@ app.controller("PagePostController", [
         "Remove",
         "Deleted data will not able to recover, are you sure you want to delete this item?"
       );
+    };
+    $scope.back = function () {
+      window.history.back();
     };
 
     $scope.removeConfirmed = async function (id) {

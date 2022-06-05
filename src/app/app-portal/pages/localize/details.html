@@ -37,8 +37,8 @@
                             <section class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Keyword</label>
-                                    <input type="text" required class="form-control form-control-lg"
-                                        ng-model="viewmodel.keyword">
+                                    <input type="text" ng-disabled="!isAdmin" required
+                                        class="form-control form-control-lg" ng-model="viewmodel.keyword">
                                 </div>
                                 <div class="row">
                                     <div class="col">
@@ -52,8 +52,8 @@
                                     <div class="col">
                                         <div class="mb-3" ng-if="isAdmin">
                                             <label class="form-label">Type</label>
-                                            <mix-select model="viewmodel.property.dataType"
-                                                options="globalSettings.dataTypes" callback="initEditors(type)">
+                                            <mix-select model="viewmodel.dataType" options="globalSettings.dataTypes"
+                                                callback="initEditors(type)">
                                             </mix-select>
                                         </div>
                                     </div>
@@ -63,9 +63,10 @@
                                     <module-form-editor ng-if="viewmodel" data="viewmodel.property"
                                         column-title="viewmodel.title" input-class="me-2"></module-form-editor>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3" ng-show="isAdmin">
                                     <label class="form-label">Default value</label>
-                                    <input type="text" class="form-control" ng-model="viewmodel.defaultValue">
+                                    <module-form-editor ng-if="viewmodel" data="viewmodel.property"
+                                        column-title="viewmodel.title" input-class="me-2"></module-form-editor>
                                 </div>
 
                                 <div class="mb-3" ng-if="isAdmin">

@@ -27,10 +27,10 @@ sharedComponents.component("mixStore", {
         ctrl.startConnection("portalhub", () => {
           ctrl.joinRoom("Theme");
         });
-
         ctrl.themeRequest = angular.copy(ngAppSettings.request);
         ctrl.themeRequest.orderBy = "createdDatetime";
         ctrl.themeRequest.postType = "theme";
+        ctrl.themeRequest.query.mixcore_versions = "1.0.5";
         ctrl.cateRequest = angular.copy(ngAppSettings.request);
         ctrl.cateRequest.mixDatabaseName = "sys_category";
         ctrl.cateRequest.pageSize = null;
@@ -66,7 +66,6 @@ sharedComponents.component("mixStore", {
       };
       ctrl.getThemes = async function () {
         $rootScope.isBusy = true;
-
         if (ctrl.themeRequest.fromDate !== null) {
           var d = new Date(ctrl.themeRequest.fromDate);
           ctrl.themeRequest.fromDate = d.toISOString();
